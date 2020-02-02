@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_my_mall">
+
+    <fragment
+        android:id="@+id/nav_my_orders"
+        android:name="com.ashish.mymall.ui.my_orders.MyOrdersFragment"
+        android:label="My orders"
+        tools:layout="@layout/fragment_my_orders" />
+
+    <fragment
+        android:id="@+id/nav_my_rewards"
+        android:name="com.ashish.mymall.ui.my_rewards.MyRewardsFragment"
+        android:label="My rewards"
+        tools:layout="@layout/fragment_my_rewards" />
+
+    <fragment
+        android:id="@+id/nav_my_cart"
+        android:name="com.ashish.mymall.ui.my_cart.MyCartFragment"
+        android:label="My cart"
+        tools:layout="@layout/fragment_my_cart" />
+
+    <fragment
+        android:id="@+id/nav_my_wishlist"
+        android:name="com.ashish.mymall.ui.my_wishlist.MyWishlistFragment"
+        android:label="My wishlist"
+        tools:layout="@layout/fragment_my_wishlist" />
+
+    <fragment
+        android:id="@+id/nav_my_account"
+        android:name="com.ashish.mymall.ui.my_account.MyAccountFragment"
+        android:label="My account"
+        tools:layout="@layout/fragment_my_account" />
+
+    <fragment
+        android:id="@+id/nav_my_mall"
+        android:name="com.ashish.mymall.ui.my_mall.MyMallFragment"
+        android:label="My Mall"
+        tools:layout="@layout/fragment_my_mall" />
+</navigation>

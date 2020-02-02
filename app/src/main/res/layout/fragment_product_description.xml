@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductDescriptionFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tv_product_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textColor="#000000"
+        android:text="ERXn nljlk jhvghjgfcgvgmbjh,k.jnnoilk;lk;mf  i  oijoi wer oihroiegnlriltlgriubekubvvdkudnrlirg  y  hj e    iihuih hierknfer egtrhyjjyy juk ykiglufyk ufy uf klfuyfkyti ktdktd tyktykdtkd ktuktktd kt  udk tukuk dtkk  k tk k  ERXn nljlk jhvghjgfcgvgmbjh,k.jnnoilk;lk;mf    i  oijoi wer oihroiegnlriltlgriubekubvvdkudnrlirg  y  hj e  iihuih hierknfer egtrhyjjyy juk ykiglufyk ufy uf klfuyfkyti ktdktd tyktykdtkd ktuktktd kt  udk tukuk dtkk  k tk k  ERXn nljlk jhvghjgfcgvgmbjh,k.jnnoilk;lk;mf    i  oijoi wer oihroiegnlriltlgriubekubvvdkudnrlirg  y  hj e  iihuih hierknfer egtrhyjjyy juk ykiglufyk ufy uf klfuyfkyti ktdktd tyktykdtkd ktuktktd kt  udk tukuk dtkk  k tk k  ERXn nljlk jhvghjgfcgvgmbjh,k.jnnoilk;lk;mf    i  oijoi wer oihroiegnlriltlgriubekubvvdkudnrlirg  y  hj e   iihuih hierknfer egtrhyjjyy juk ykiglufyk ufy uf klfuyfkyti ktdktd tyktykdtkd ktuktktd kt  udk tukuk dtkk  k tk k  " />
+
+</FrameLayout>
