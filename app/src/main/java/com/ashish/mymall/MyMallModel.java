@@ -10,6 +10,15 @@ public class MyMallModel {
     public static final int GRID_PRODUCT_VIEW = 3;
 
     private int type;
+    private String backgroundColor;
+
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 
     public int getType() {
         return type;
@@ -42,30 +51,24 @@ public class MyMallModel {
 
 //////Strip ad
 
-    private int resource;
-    private String backgroundColor;
+    private String resource;
 
-    public MyMallModel(int type, int resource, String backgroundColor) {
+
+    public MyMallModel(int type, String resource, String backgroundColor) {
         this.type = type;
         this.resource = resource;
         this.backgroundColor = backgroundColor;
     }
 
-    public int getResource() {
+    public String getResource() {
         return resource;
     }
 
-    public void setResource(int resource) {
+    public void setResource(String resource) {
         this.resource = resource;
     }
 
-    public String getBackgroundColor() {
-        return backgroundColor;
-    }
 
-    public void setBackgroundColor(String backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
 //////Strip ad
 
 
@@ -90,9 +93,10 @@ public class MyMallModel {
         this.horizontalProductScrollModelList = horizontalProductScrollModelList;
     }
 
-    public MyMallModel(int type, String title, List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
+    public MyMallModel(int type, String title,String backgroundColor ,List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
         this.type = type;
         this.title = title;
+        this.backgroundColor=backgroundColor;
         this.horizontalProductScrollModelList = horizontalProductScrollModelList;
     }
 

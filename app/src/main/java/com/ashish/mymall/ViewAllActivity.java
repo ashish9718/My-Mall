@@ -18,6 +18,9 @@ public class ViewAllActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private GridView gridView;
+    public static List<HorizontalProductScrollModel> horizontalProductScrollModelList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +28,7 @@ public class ViewAllActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Deals of the day");
+        getSupportActionBar().setTitle(getIntent().getStringExtra("title"));
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -63,31 +66,6 @@ public class ViewAllActivity extends AppCompatActivity {
         }else if(layout==1) {
 
             gridView.setVisibility(View.VISIBLE);
-
-            List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.mobile, "Redmi 5A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.images, "Redmi 6A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.banner, "Redmi 7A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.logoutt, "Redmi 8A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.usermale, "Redmi 9A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.home, "Redmi 5A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart, "Redmi 6A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.search, "Redmi 9A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.home, "Redmi 5A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart, "Redmi 6A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.search, "Redmi 9A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.mobile, "Redmi 5A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.images, "Redmi 6A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.banner, "Redmi 7A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.logoutt, "Redmi 8A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.usermale, "Redmi 9A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.home, "Redmi 5A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart, "Redmi 6A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.search, "Redmi 9A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.home, "Redmi 5A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.cart, "Redmi 6A", "SD 425 processor", "Rs.5999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.mipmap.search, "Redmi 9A", "SD 425 processor", "Rs.5999/-"));
-
 
             GridProductLayoutAdapter gridProductLayoutAdapter = new GridProductLayoutAdapter(horizontalProductScrollModelList);
             gridProductLayoutAdapter.notifyDataSetChanged();

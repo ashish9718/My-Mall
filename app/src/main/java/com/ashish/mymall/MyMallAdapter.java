@@ -1,6 +1,7 @@
 package com.ashish.mymall;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -19,13 +20,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyMallAdapter extends RecyclerView.Adapter {
-
 
     private List<MyMallModel> myMallModelList;
     private RecyclerView.RecycledViewPool recycledViewPool;
@@ -85,19 +88,21 @@ public class MyMallAdapter extends RecyclerView.Adapter {
                 ((BannerSliderViewHolder) holder).setBannerSliderViewPager(sliderModelList);
                 break;
             case MyMallModel.STRIP_AD_BANNER:
-                int resource=myMallModelList.get(position).getResource();
+                String resource=myMallModelList.get(position).getResource();
                 String color=myMallModelList.get(position).getBackgroundColor();
                 ((StripAdBannerViewHolder)holder).StripAd(resource,color);
                 break;
             case MyMallModel.HORIZONTAL_PRODUCT_VIEW:
                 String title=myMallModelList.get(position).getTitle();
+                String colorr=myMallModelList.get(position).getBackgroundColor();
                 List<HorizontalProductScrollModel> horizontalProductScrollModelList=myMallModelList.get(position).getHorizontalProductScrollModelList();
-                ((HorizontalProductViewHolder) holder).setHorizontalProductLayout(horizontalProductScrollModelList,title);
+                ((HorizontalProductViewHolder) holder).setHorizontalProductLayout(horizontalProductScrollModelList,title,colorr);
                 break;
             case MyMallModel.GRID_PRODUCT_VIEW:
+                String gridcolorr=myMallModelList.get(position).getBackgroundColor();
                 String gridtitle=myMallModelList.get(position).getTitle();
                 List<HorizontalProductScrollModel> gridProductScrollModelList=myMallModelList.get(position).getHorizontalProductScrollModelList();
-                ((GridProductViewHolder) holder).setGridProductLayout(gridProductScrollModelList,gridtitle);
+                ((GridProductViewHolder) holder).setGridProductLayout(gridProductScrollModelList,gridtitle,gridcolorr);
                 break;
             default:
                 return;
@@ -237,30 +242,31 @@ public class MyMallAdapter extends RecyclerView.Adapter {
 
         }
 
-        public void StripAd(int resource,String color){
+        public void StripAd(String resource,String color){
 
-            stripAdImage.setImageResource(resource);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.banner)).into(stripAdImage);
+
             stripAdContainer.setBackgroundColor(Color.parseColor(color));
         }
     }
 
     public class HorizontalProductViewHolder extends RecyclerView.ViewHolder{
-
+        private ConstraintLayout container;
         private TextView horizontallayoutTitle;
         private Button horizontalviewAllBtn;
         private RecyclerView horizontalRecyclerView;
 
         public HorizontalProductViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            container=itemView.findViewById(R.id.container);
             horizontalRecyclerView=itemView.findViewById(R.id.horizontal_scroll_layout_recycler_view);
             horizontalviewAllBtn=itemView.findViewById(R.id.horizontal_scroll_layout_viewall_button);
             horizontallayoutTitle=itemView.findViewById(R.id.horizontal_scroll_layout_title);
             horizontalRecyclerView.setRecycledViewPool(recycledViewPool);
         }
 
-        private void setHorizontalProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList,String title){
-
+        private void setHorizontalProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList,String title,String color){
+            container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             horizontallayoutTitle.setText(title);
 
             if(horizontalProductScrollModelList.size() >8){
@@ -288,21 +294,21 @@ public class MyMallAdapter extends RecyclerView.Adapter {
     }
 
     public class GridProductViewHolder extends RecyclerView.ViewHolder{
-
+        private ConstraintLayout container;
         private TextView gridLayoutTitle;
         private Button gridLayoutButton;
         private GridLayout gridProductLayout;
 
         public GridProductViewHolder(@NonNull final View itemView) {
             super(itemView);
-
+            container=itemView.findViewById(R.id.container);
             gridLayoutTitle=itemView.findViewById(R.id.grid_product_layout_title);
             gridLayoutButton=itemView.findViewById(R.id.grid_product_layout_viewall_button);
             gridProductLayout=itemView.findViewById(R.id.grid_layout);
 
         }
-        private void setGridProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList,String title) {
-
+        private void setGridProductLayout(final List<HorizontalProductScrollModel> horizontalProductScrollModelList, final String title, String color) {
+            container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             gridLayoutTitle.setText(title);
 
             for(int x=0;x<4;x++){
@@ -311,10 +317,10 @@ public class MyMallAdapter extends RecyclerView.Adapter {
                 TextView productDesc=gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_description);
                 TextView productPrice=gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_price);
 
-                productImage.setImageResource(horizontalProductScrollModelList.get(x).getProductImage());
+                Glide.with(itemView.getContext()).load(horizontalProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.mipmap.mobile)).into(productImage);
                 productTitle.setText(horizontalProductScrollModelList.get(x).getProductTitle());
                 productDesc.setText(horizontalProductScrollModelList.get(x).getProductDesc());
-                productPrice.setText(horizontalProductScrollModelList.get(x).getProductPrice());
+                productPrice.setText("Rs."+horizontalProductScrollModelList.get(x).getProductPrice()+"/-");
 
                 gridProductLayout.getChildAt(x).setBackgroundColor(Color.WHITE);
                 gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
@@ -327,7 +333,11 @@ public class MyMallAdapter extends RecyclerView.Adapter {
             gridLayoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemView.getContext().startActivity(new Intent(itemView.getContext(),ViewAllActivity.class).putExtra("layout",1));
+                    ViewAllActivity.horizontalProductScrollModelList=horizontalProductScrollModelList;
+                    itemView.getContext().startActivity(new Intent(itemView.getContext(),ViewAllActivity.class)
+                            .putExtra("layout",1)
+                            .putExtra("title",title)
+                    );
                 }
             });
 

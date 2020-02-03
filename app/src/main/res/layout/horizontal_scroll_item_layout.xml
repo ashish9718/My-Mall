@@ -12,6 +12,7 @@
         android:id="@+id/h_s_product_image"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:scaleType="fitCenter"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -22,15 +23,15 @@
 
     <TextView
         android:id="@+id/h_s_product_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Redmi 5A"
+        android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="12sp"
-        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/h_s_product_image" />
@@ -43,10 +44,10 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
-        android:textSize="10sp"
-        android:textColor="#006400"
-        android:textAlignment="center"
         android:text="SD 425 Processor"
+        android:textAlignment="center"
+        android:textColor="#006400"
+        android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/h_s_product_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +55,7 @@
 
     <TextView
         android:id="@+id/h_s_product_price"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"

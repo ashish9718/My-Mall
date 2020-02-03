@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.ashish.mymall.ui.my_account.MyAccountFragment;
@@ -12,6 +14,7 @@ import com.ashish.mymall.ui.my_mall.MyMallFragment;
 import com.ashish.mymall.ui.my_orders.MyOrdersFragment;
 import com.ashish.mymall.ui.my_rewards.MyRewardsFragment;
 import com.ashish.mymall.ui.my_wishlist.MyWishlistFragment;
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,6 +47,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import static com.ashish.mymall.R.*;
 import static com.ashish.mymall.RegisterActivity.setsignUpFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MyMallFragment=0,CART_FRAGMENT=1,ORDERS_FRAGMENT=2,WISHLIST_FRAGMENT=3,REWARDS_FRAGMENT=4,MYACCOUNT_FRAGMENT=5;
     private int currentFragment=-1;
-    private ImageView actionbarLogo;
+    private ImageView actionbarLogo,noInternet;
     private Window window;
     private Toolbar toolbar;
     public static Boolean showCart=false;
@@ -63,45 +67,43 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.toolbar);
-        actionbarLogo=findViewById(R.id.action_bar_logo);
+        setContentView(layout.activity_main);
+        toolbar = findViewById(id.toolbar);
+        actionbarLogo=findViewById(id.action_bar_logo);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         window=getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+        final DrawerLayout drawer = findViewById(id.drawer_layout);
+        navigationView = findViewById(id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_my_mall,
-                R.id.nav_my_orders, R.id.nav_my_rewards, R.id.nav_my_cart,
-                R.id.nav_my_wishlist, R.id.nav_my_account,R.id.nav_sign_out)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(id.nav_my_mall,
+                id.nav_my_orders, id.nav_my_rewards, id.nav_my_cart,
+                id.nav_my_wishlist, id.nav_my_account, id.nav_sign_out)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavController navController = Navigation.findNavController(this, id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.getMenu().getItem(0).setChecked(true);
 
-
-        frameLayout=findViewById(R.id.main_frame_layout);
+        frameLayout=findViewById(id.main_frame_layout);
 
         if(showCart){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             gotoFragment("My Cart",new MyCartFragment(),-2);
-        }else {
+        }
+        else {
             setFragment(new MyMallFragment(), MyMallFragment);
-            ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, string.navigation_drawer_open, string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
-
         }
-
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -137,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         }else if(id==R.id.main_cart_icon){
 
             final Dialog signInDialog=new Dialog(MainActivity.this);
-            signInDialog.setContentView(R.layout.sign_in_dialog);
+            signInDialog.setContentView(layout.sign_in_dialog);
             signInDialog.setCancelable(true);
 
             signInDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavController navController = Navigation.findNavController(this, id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -224,12 +225,12 @@ public class MainActivity extends AppCompatActivity {
                 window.setStatusBarColor(Color.parseColor("#5b04b1"));
                 toolbar.setBackgroundColor(Color.parseColor("#5b04b1"));
             }else {
-                window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                window.setStatusBarColor(getResources().getColor(color.colorPrimary));
+                toolbar.setBackgroundColor(getResources().getColor(color.colorPrimary));
             }
             currentFragment = fragementNo;
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            fragmentTransaction.setCustomAnimations(anim.fade_in, anim.fade_out);
             fragmentTransaction.replace(frameLayout.getId(), fragment);
             fragmentTransaction.commit();
         }
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(id.drawer_layout);
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }else {
