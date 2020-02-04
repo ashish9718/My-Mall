@@ -93,12 +93,34 @@ public class MyMallModel {
         this.horizontalProductScrollModelList = horizontalProductScrollModelList;
     }
 
-    public MyMallModel(int type, String title,String backgroundColor ,List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
+    public MyMallModel(int type, String title, String backgroundColor , List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
         this.type = type;
         this.title = title;
         this.backgroundColor=backgroundColor;
         this.horizontalProductScrollModelList = horizontalProductScrollModelList;
     }
+
+            ///horizontal product view only
+    private List<WishlistModel> viewAllProductList;
+
+    public MyMallModel(int type, String title,String backgroundColor ,List<HorizontalProductScrollModel> horizontalProductScrollModelList,List<WishlistModel> viewAllProductList) {
+        this.type = type;
+        this.title = title;
+        this.backgroundColor=backgroundColor;
+        this.horizontalProductScrollModelList = horizontalProductScrollModelList;
+        this.viewAllProductList=viewAllProductList;
+    }
+
+    public List<WishlistModel> getViewAllProductList() {
+        return viewAllProductList;
+    }
+
+    public void setViewAllProductList(List<WishlistModel> viewAllProductList) {
+        this.viewAllProductList = viewAllProductList;
+    }
+
+            ///horizontal product view only
+
 
 
 ///////horizontal product view and grid product view

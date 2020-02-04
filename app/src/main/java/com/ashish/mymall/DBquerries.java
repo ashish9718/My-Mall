@@ -17,9 +17,10 @@ import java.util.List;
 public class DBquerries {
 
     public static FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
-    public static List<MyMallModel> myMallModelList=new ArrayList<>();
+    //public static List<MyMallModel> myMallModelList=new ArrayList<>();
     public static List<CategoryModel> categoryModelList=new ArrayList<>();
-
+    public static List<List<MyMallModel>> lists=new ArrayList<>();
+    public static List<String> loadedCategoriesNames=new ArrayList<>();
 
 
     public static void loadCategories(final CategoryAdapter categoryAdapter, final Context context){
@@ -44,10 +45,10 @@ public class DBquerries {
 
     }
 
-    public static void loadFragmentData(final MyMallAdapter myMallAdapter, final Context context){
+    public static void loadFragmentData(final MyMallAdapter myMallAdapter, final Context context,final int index,String categoryName){
 
         firebaseFirestore.collection("CATEGORIES")
-                .document("HOME")
+                .document(categoryName.toUpperCase())
                 .collection("TOP_DEALS").orderBy("index").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -62,15 +63,22 @@ public class DBquerries {
                                     for(long x=1;x<=no_of_banners;x++){
                                         sliderModelList.add(new SliderModel(queryDocumentSnapshot.get("banner_"+x).toString(),queryDocumentSnapshot.get("banner_"+x+"_background").toString()));
                                     }
-                                    myMallModelList.add(new MyMallModel(0,sliderModelList));
+                                    lists.get(index).add(new MyMallModel(0,sliderModelList));
 
-                                }else if((long)queryDocumentSnapshot.get("view_type") == 1){
+                                }
 
-                                    myMallModelList.add(new MyMallModel(1,queryDocumentSnapshot.get("strip_ad_banner").toString(),queryDocumentSnapshot.get("background").toString()));
+                                else if((long)queryDocumentSnapshot.get("view_type") == 1){
 
-                                }else if((long)queryDocumentSnapshot.get("view_type") == 2){
+                                    lists.get(index).add(new MyMallModel(1,queryDocumentSnapshot.get("strip_ad_banner").toString(),queryDocumentSnapshot.get("background").toString()));
+
+                                }
+
+                                else if((long)queryDocumentSnapshot.get("view_type") == 2){
+
+                                    List<WishlistModel> viewAllProductList=new ArrayList<>();
                                     List<HorizontalProductScrollModel> horizontalProductScrollModelList=new ArrayList<>();
                                     long no_of_products= (long) queryDocumentSnapshot.get("no_of_products");
+
                                     for(long x=1;x<=no_of_products;x++){
                                         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                                                 queryDocumentSnapshot.get("product_ID_"+x).toString()
@@ -79,10 +87,23 @@ public class DBquerries {
                                                 ,queryDocumentSnapshot.get("product_subtitle_"+x).toString()
                                                 ,queryDocumentSnapshot.get("product_price_"+x).toString()
                                         ));
-                                    }
-                                    myMallModelList.add(new MyMallModel(2,queryDocumentSnapshot.get("layout_title").toString(),queryDocumentSnapshot.get("layout_background").toString(),horizontalProductScrollModelList));
 
-                                }else if((long)queryDocumentSnapshot.get("view_type") == 3){
+                                        viewAllProductList.add(new WishlistModel(
+                                                queryDocumentSnapshot.get("product_image_"+x).toString()
+                                                ,queryDocumentSnapshot.get("product_full_title_"+x).toString()
+                                                ,(long)queryDocumentSnapshot.get("free_coupans_"+x)
+                                                ,queryDocumentSnapshot.get("average_rating_"+x).toString()
+                                                ,(long)queryDocumentSnapshot.get("total_ratings_"+x)
+                                                ,queryDocumentSnapshot.get("product_price_"+x).toString()
+                                                ,queryDocumentSnapshot.get("cutted_price_"+x).toString()
+                                                ,(boolean)queryDocumentSnapshot.get("COD_"+x)
+                                        ));
+                                    }
+                                    lists.get(index).add(new MyMallModel(2,queryDocumentSnapshot.get("layout_title").toString(),queryDocumentSnapshot.get("layout_background").toString(),horizontalProductScrollModelList,viewAllProductList));
+
+                                }
+
+                                else if((long)queryDocumentSnapshot.get("view_type") == 3){
 
                                     List<HorizontalProductScrollModel> gridProductScrollModelList=new ArrayList<>();
                                     long no_of_products= (long) queryDocumentSnapshot.get("no_of_products");
@@ -95,7 +116,7 @@ public class DBquerries {
                                                 ,queryDocumentSnapshot.get("product_price_"+x).toString()
                                         ));
                                     }
-                                    myMallModelList.add(new MyMallModel(3,queryDocumentSnapshot.get("layout_title").toString(),queryDocumentSnapshot.get("layout_background").toString(),gridProductScrollModelList));
+                                    lists.get(index).add(new MyMallModel(3,queryDocumentSnapshot.get("layout_title").toString(),queryDocumentSnapshot.get("layout_background").toString(),gridProductScrollModelList));
 
                                 }
                             }

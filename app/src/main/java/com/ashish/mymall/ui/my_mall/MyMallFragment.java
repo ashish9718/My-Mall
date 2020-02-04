@@ -17,13 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashish.mymall.CategoryAdapter;
 import com.ashish.mymall.MyMallAdapter;
+import com.ashish.mymall.MyMallModel;
 import com.ashish.mymall.R;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 import static com.ashish.mymall.DBquerries.categoryModelList;
+import static com.ashish.mymall.DBquerries.lists;
 import static com.ashish.mymall.DBquerries.loadCategories;
 import static com.ashish.mymall.DBquerries.loadFragmentData;
-import static com.ashish.mymall.DBquerries.myMallModelList;
+import static com.ashish.mymall.DBquerries.loadedCategoriesNames;
 
 public class MyMallFragment extends Fragment {
 
@@ -67,14 +71,17 @@ public class MyMallFragment extends Fragment {
             homepageRecyclerview.setLayoutManager(testingLayoutManager);
 
 
-            myMallAdapter=new MyMallAdapter(myMallModelList);
-            homepageRecyclerview.setAdapter(myMallAdapter);
-
-            if(myMallModelList.size() == 0){
-                loadFragmentData(myMallAdapter,getContext());
+            if(lists.size() == 0){
+                loadedCategoriesNames.add("HOME");
+                lists.add(new ArrayList<MyMallModel>());
+                myMallAdapter=new MyMallAdapter(lists.get(0));
+                loadFragmentData(myMallAdapter,getContext(),0,"Home");
             }else {
+                myMallAdapter=new MyMallAdapter(lists.get(0));
                 myMallAdapter.notifyDataSetChanged();
             }
+
+            homepageRecyclerview.setAdapter(myMallAdapter);
 
         }
         else {

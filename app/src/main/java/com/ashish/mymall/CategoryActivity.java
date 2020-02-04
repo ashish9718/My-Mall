@@ -13,9 +13,14 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ashish.mymall.DBquerries.lists;
+import static com.ashish.mymall.DBquerries.loadFragmentData;
+import static com.ashish.mymall.DBquerries.loadedCategoriesNames;
+
 public class CategoryActivity extends AppCompatActivity {
 
     private RecyclerView categoryRecyclerView;
+    MyMallAdapter myMallAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +36,28 @@ public class CategoryActivity extends AppCompatActivity {
 
         categoryRecyclerView=findViewById(R.id.category_recycler_view);
 
-
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(this);
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         categoryRecyclerView.setLayoutManager(testingLayoutManager);
 
-        List<MyMallModel> myMallModelList=new ArrayList<>();
+        int listPosition=0;
+        for(int x=0; x<loadedCategoriesNames.size();x++){
+            if(loadedCategoriesNames.get(x).equals(title.toUpperCase())){
+                listPosition=x;
+            }
+        }
 
-        MyMallAdapter myMallAdapter=new MyMallAdapter(myMallModelList);
+        if(listPosition == 0){
+            loadedCategoriesNames.add(title.toUpperCase());
+            lists.add(new ArrayList<MyMallModel>());
+            myMallAdapter=new MyMallAdapter(lists.get(loadedCategoriesNames.size()-1));
+            loadFragmentData(myMallAdapter,this,loadedCategoriesNames.size()-1,title);
+        }else {
+            myMallAdapter=new MyMallAdapter(lists.get(listPosition));
+
+        }
+
+
         categoryRecyclerView.setAdapter(myMallAdapter);
         myMallAdapter.notifyDataSetChanged();
 

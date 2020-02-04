@@ -1,43 +1,47 @@
 package com.ashish.mymall;
 
+import android.widget.ImageView;
+
 public class WishlistModel {
 
-    private int productImage,freeCoupans,totalRatings;
-    private String productTitle,rating,productPrice,cuttedPrice,paymentMethod;
+    private long freeCoupans,totalRatings;
+    private String productImage;
+    private String productTitle,rating,productPrice,cuttedPrice;
+    private Boolean COD;
 
-    public WishlistModel(int productImage, int freeCoupans, int totalRatings, String productTitle, String rating, String productPrice, String cuttedPrice, String paymentMethod) {
-        this.productImage = productImage;
+    public WishlistModel(String productImage, String productTitle,long freeCoupans, String rating, long totalRatings, String productPrice, String cuttedPrice, Boolean COD) {
         this.freeCoupans = freeCoupans;
         this.totalRatings = totalRatings;
+        this.productImage = productImage;
         this.productTitle = productTitle;
         this.rating = rating;
         this.productPrice = productPrice;
         this.cuttedPrice = cuttedPrice;
-        this.paymentMethod = paymentMethod;
+        this.COD = COD;
     }
 
-    public int getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(int productImage) {
-        this.productImage = productImage;
-    }
-
-    public int getFreeCoupans() {
+    public long getFreeCoupans() {
         return freeCoupans;
     }
 
-    public void setFreeCoupans(int freeCoupans) {
+    public void setFreeCoupans(long freeCoupans) {
         this.freeCoupans = freeCoupans;
     }
 
-    public int getTotalRatings() {
+    public long getTotalRatings() {
         return totalRatings;
     }
 
-    public void setTotalRatings(int totalRatings) {
+    public void setTotalRatings(long totalRatings) {
         this.totalRatings = totalRatings;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
     public String getProductTitle() {
@@ -72,11 +76,11 @@ public class WishlistModel {
         this.cuttedPrice = cuttedPrice;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
+    public Boolean getCOD() {
+        return COD;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setCOD(Boolean COD) {
+        this.COD = COD;
     }
 }

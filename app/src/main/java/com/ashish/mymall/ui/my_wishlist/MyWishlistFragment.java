@@ -37,12 +37,6 @@ public class MyWishlistFragment extends Fragment {
         wishlistRecyclerView.setLayoutManager(linearLayoutManager);
 
         List<WishlistModel> wishlistModelList=new ArrayList<>();
-        wishlistModelList.add(new WishlistModel(R.mipmap.mobile,1,2,"Realme 5 pro","2","Rs.49999/-","Rs.59999/-","Cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.mipmap.banner,2,3,"Realme 6 pro","3","Rs.49999/-","Rs.59999/-","EMI"));
-        wishlistModelList.add(new WishlistModel(R.mipmap.star,3,4,"Realme 7 pro","4","Rs.49999/-","Rs.59999/-","Credit Card"));
-        wishlistModelList.add(new WishlistModel(R.mipmap.images,0,5,"Realme 8 pro","5","Rs.49999/-","Rs.59999/-","Debit Card"));
-        wishlistModelList.add(new WishlistModel(R.mipmap.mobile,1,2,"Realme 5 pro","2","Rs.49999/-","Rs.59999/-","Cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.mipmap.banner,2,3,"Realme 6 pro","3","Rs.49999/-","Rs.59999/-","EMI"));
 
         WishlistAdapter wishlistAdapter=new WishlistAdapter(wishlistModelList,true);
         wishlistAdapter.notifyDataSetChanged();
