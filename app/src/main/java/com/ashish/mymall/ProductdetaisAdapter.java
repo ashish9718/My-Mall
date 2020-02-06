@@ -4,13 +4,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import java.util.List;
+
 public class ProductdetaisAdapter extends FragmentPagerAdapter {
 
     private int totalTabs;
+    private String productDesc,productOtherDetails;
+    private List<ProductSpecificationModel> productSpecificationModelList;
 
-    public ProductdetaisAdapter(FragmentManager fm,int totalTabs) {
+    public ProductdetaisAdapter(FragmentManager fm, int totalTabs, String productDesc, String productOtherDetails, List<ProductSpecificationModel> productSpecificationModelList) {
         super(fm);
-        this.totalTabs=totalTabs;
+        this.totalTabs = totalTabs;
+        this.productDesc = productDesc;
+        this.productOtherDetails = productOtherDetails;
+        this.productSpecificationModelList = productSpecificationModelList;
     }
 
     @Override
@@ -18,11 +25,17 @@ public class ProductdetaisAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return new ProductDescriptionFragment();
+                ProductDescriptionFragment productDescriptionFragment1=new ProductDescriptionFragment();
+                productDescriptionFragment1.body=productDesc;
+                return productDescriptionFragment1;
             case 1:
-                return new ProductSpecificationFragment();
+                ProductSpecificationFragment productSpecificationFragment=new ProductSpecificationFragment();
+                productSpecificationFragment.productSpecificationModelList=productSpecificationModelList;
+                return productSpecificationFragment;
             case 2:
-                return new ProductDescriptionFragment();
+                ProductDescriptionFragment productDescriptionFragment2=new ProductDescriptionFragment();
+                productDescriptionFragment2.body=productOtherDetails;
+                return productDescriptionFragment2;
             default:
                 return null;
         }

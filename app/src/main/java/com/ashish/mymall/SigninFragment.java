@@ -46,6 +46,7 @@ public class SigninFragment extends Fragment {
         // Required empty public constructor
     }
     private String pattern="[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    public static boolean disableCloseBtn = false;
 
     private TextView dont_have_an_acc , forgotPassword;
     private FrameLayout parentframeLayout;
@@ -76,6 +77,11 @@ public class SigninFragment extends Fragment {
 
         firebaseAuth=FirebaseAuth.getInstance();
 
+        if(disableCloseBtn){
+            closeBtn.setVisibility(View.GONE);
+        }else {
+            closeBtn.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
@@ -179,7 +185,11 @@ public class SigninFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    startActivity(new Intent(getActivity(),MainActivity.class));
+                                    if(disableCloseBtn){
+                                        disableCloseBtn=false;
+                                    }else {
+                                        startActivity(new Intent(getActivity(),MainActivity.class));
+                                    }
                                     getActivity().finish();
                                 }else {
                                     progressBar.setVisibility(View.INVISIBLE);

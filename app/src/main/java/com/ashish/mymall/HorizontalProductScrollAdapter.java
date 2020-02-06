@@ -40,12 +40,8 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
         String title=horizontalProductScrollModelList.get(position).getProductTitle();
         String desc=horizontalProductScrollModelList.get(position).getProductDesc();
         String price=horizontalProductScrollModelList.get(position).getProductPrice();
-
-
-        holder.setProductImage(resource);
-        holder.setProductTitle(title);
-        holder.setProductDesc(desc);
-        holder.setProductPrice(price);
+        String productId=horizontalProductScrollModelList.get(position).getProductID();
+        holder.setProduct(productId,resource,title,desc,price);
 
 
     }
@@ -73,29 +69,22 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
             productDesc=itemView.findViewById(R.id.h_s_product_description);
             productPrice=itemView.findViewById(R.id.h_s_product_price);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    itemView.getContext().startActivity(new Intent(itemView.getContext(),ProductDetailsActivity.class));
-                }
-            });
-
         }
 
-        private void setProductImage(String resource) {
-            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.mobile)).into(productImage);
-        }
-
-        public void setProductTitle(String title) {
+        private void setProduct(final String productId, String resource, String title, String desc, String price) {
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(productImage);
             productTitle.setText(title);
-        }
-
-        public void setProductDesc(String desc) {
             productDesc.setText(desc);
-        }
-
-        public void setProductPrice(String price) {
             productPrice.setText("Rs."+price+"/-");
+
+            if(!title.equals("")){
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        itemView.getContext().startActivity(new Intent(itemView.getContext(),ProductDetailsActivity.class).putExtra("PRODUCT_ID",productId));
+                    }
+                });
+            }
         }
 
     }

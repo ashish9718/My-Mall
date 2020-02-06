@@ -22,6 +22,7 @@ import java.util.List;
 public class ProductSpecificationFragment extends Fragment {
 
     private RecyclerView productSpecificationrecyclerview;
+    public List<ProductSpecificationModel> productSpecificationModelList;
 
     public ProductSpecificationFragment() {
         // Required empty public constructor
@@ -39,15 +40,6 @@ public class ProductSpecificationFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         productSpecificationrecyclerview.setLayoutManager(linearLayoutManager);
-        List<ProductSpecificationModel> productSpecificationModelList=new ArrayList<>();
-        productSpecificationModelList.add(new ProductSpecificationModel(0,"General"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","4 gb"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","6 gb"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","8 gb"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","10 gb"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","12 gb"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","14 gb"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1,"Ram","16 gb"));
 
 
         ProductSpecificationAdapter productSpecificationAdapter=new ProductSpecificationAdapter(productSpecificationModelList);

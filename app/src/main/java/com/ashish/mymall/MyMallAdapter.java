@@ -1,5 +1,6 @@
 package com.ashish.mymall;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import androidx.gridlayout.widget.GridLayout;
 import android.widget.GridView;
@@ -32,6 +35,7 @@ public class MyMallAdapter extends RecyclerView.Adapter {
 
     private List<MyMallModel> myMallModelList;
     private RecyclerView.RecycledViewPool recycledViewPool;
+    private int lastPos=-1;
 
     public MyMallAdapter(List<MyMallModel> myMallModelList) {
         this.myMallModelList = myMallModelList;
@@ -107,6 +111,11 @@ public class MyMallAdapter extends RecyclerView.Adapter {
                 break;
             default:
                 return;
+        }
+        if(lastPos<position) {
+            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in);
+            holder.itemView.setAnimation(animation);
+            lastPos=position;
         }
     }
 
@@ -245,7 +254,7 @@ public class MyMallAdapter extends RecyclerView.Adapter {
 
         public void StripAd(String resource,String color){
 
-            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.banner)).into(stripAdImage);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(stripAdImage);
 
             stripAdContainer.setBackgroundColor(Color.parseColor(color));
         }
@@ -322,30 +331,35 @@ public class MyMallAdapter extends RecyclerView.Adapter {
                 TextView productDesc=gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_description);
                 TextView productPrice=gridProductLayout.getChildAt(x).findViewById(R.id.h_s_product_price);
 
-                Glide.with(itemView.getContext()).load(horizontalProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.mipmap.mobile)).into(productImage);
+                Glide.with(itemView.getContext()).load(horizontalProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(productImage);
                 productTitle.setText(horizontalProductScrollModelList.get(x).getProductTitle());
                 productDesc.setText(horizontalProductScrollModelList.get(x).getProductDesc());
                 productPrice.setText("Rs."+horizontalProductScrollModelList.get(x).getProductPrice()+"/-");
 
                 gridProductLayout.getChildAt(x).setBackgroundColor(Color.WHITE);
-                gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+                if(!title.equals("")){
+                    final int finalX = x;
+                    gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            itemView.getContext().startActivity(new Intent(itemView.getContext(),ProductDetailsActivity.class).putExtra("PRODUCT_ID",horizontalProductScrollModelList.get(finalX).getProductID()));
+                        }
+                    });
+                }
+            }
+
+            if(!title.equals("")) {
+                gridLayoutButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        itemView.getContext().startActivity(new Intent(itemView.getContext(),ProductDetailsActivity.class));
+                        ViewAllActivity.horizontalProductScrollModelList = horizontalProductScrollModelList;
+                        itemView.getContext().startActivity(new Intent(itemView.getContext(), ViewAllActivity.class)
+                                .putExtra("layout", 1)
+                                .putExtra("title", title)
+                        );
                     }
                 });
             }
-            gridLayoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ViewAllActivity.horizontalProductScrollModelList=horizontalProductScrollModelList;
-                    itemView.getContext().startActivity(new Intent(itemView.getContext(),ViewAllActivity.class)
-                            .putExtra("layout",1)
-                            .putExtra("title",title)
-                    );
-                }
-            });
-
         }
 
     }

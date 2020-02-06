@@ -40,7 +40,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertview, final ViewGroup viewGroup) {
+    public View getView(final int position, View convertview, final ViewGroup viewGroup) {
 
         View view;
         if(convertview==null){
@@ -51,7 +51,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    viewGroup.getContext().startActivity(new Intent(viewGroup.getContext(),ProductDetailsActivity.class));
+                    viewGroup.getContext().startActivity(new Intent(viewGroup.getContext(),ProductDetailsActivity.class).putExtra("PRODUCT_ID",horizontalProductScrollModelList.get(position).getProductID()));
                 }
             });
 
@@ -60,7 +60,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
             TextView productDesc=view.findViewById(R.id.h_s_product_description);
             TextView productPrice=view.findViewById(R.id.h_s_product_price);
 
-            Glide.with(viewGroup.getContext()).load(horizontalProductScrollModelList.get(position).getProductImage()).apply(new RequestOptions().placeholder(R.mipmap.mobile)).into(productImage);
+            Glide.with(viewGroup.getContext()).load(horizontalProductScrollModelList.get(position).getProductImage()).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(productImage);
             productTitle.setText(horizontalProductScrollModelList.get(position).getProductTitle());
             productDesc.setText(horizontalProductScrollModelList.get(position).getProductDesc());
             productPrice.setText("Rs."+horizontalProductScrollModelList.get(position).getProductPrice()+"/-");

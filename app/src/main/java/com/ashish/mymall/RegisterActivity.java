@@ -34,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if(keyCode==KeyEvent.KEYCODE_BACK){
+            SigninFragment.disableCloseBtn=false;
+            SignupFragment.disableCloseBtn=false;
             if(onResetPassFragment){
                 onResetPassFragment=false;
                 setFragment(new SigninFragment());

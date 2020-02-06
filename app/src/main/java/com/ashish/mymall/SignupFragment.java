@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -46,6 +47,7 @@ public class SignupFragment extends Fragment {
     }
 
     private String pattern="[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    public static boolean disableCloseBtn = false;
 
     private TextView alreadyHaveAcc;
     private FrameLayout parentframeLayout;
@@ -77,6 +79,12 @@ public class SignupFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore=FirebaseFirestore.getInstance();
 
+        if(disableCloseBtn){
+            closeButton.setVisibility(View.GONE);
+
+        }else {
+            closeButton.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
@@ -187,24 +195,42 @@ public class SignupFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    //FirebaseUser user = mAuth.getCurrentUser();
 
-                                    Map<Object, String> userdata= new HashMap<>();
+                                    Map<String,Object> userdata= new HashMap<>();
                                     userdata.put("name",name.getText().toString());
 
-                                    firebaseFirestore.collection("USERS")
-                                            .add(userdata)
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    firebaseFirestore.collection("USERS").document(mAuth.getUid())
+                                            .set(userdata)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
-                                                        startActivity(new Intent(getActivity(),MainActivity.class));
-                                                        getActivity().finish();
-                                                    }else {
-                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                        signupBtn.setEnabled(true);
-                                                        signupBtn.setTextColor(Color.rgb(255,255,255));
+                                                        Map<String,Object> listsize= new HashMap<>();
+                                                        listsize.put("list_size", (long) 0);
+                                                        firebaseFirestore.collection("USERS").document(mAuth.getUid())
+                                                            .collection("USER_DATA").document("MY_WISHLIST")
+                                                            .set(listsize)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if(task.isSuccessful()){
+                                                                        if(disableCloseBtn){
+                                                                            disableCloseBtn=false;
+                                                                        }else {
+                                                                            startActivity(new Intent(getActivity(),MainActivity.class));
+                                                                        }
+                                                                        getActivity().finish();
+                                                                    }else {
+                                                                        progressBar.setVisibility(View.INVISIBLE);
+                                                                        signupBtn.setEnabled(true);
+                                                                        signupBtn.setTextColor(Color.rgb(255,255,255));
+                                                                        String error=task.getException().getMessage();
+                                                                        Toast.makeText(getActivity(), error,Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
+                                                    }
+                                                    else {
                                                         String error=task.getException().getMessage();
                                                         Toast.makeText(getActivity(), error,Toast.LENGTH_SHORT).show();
                                                     }
