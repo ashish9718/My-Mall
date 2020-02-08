@@ -1,5 +1,6 @@
 package com.ashish.mymall.ui.my_wishlist;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ashish.mymall.DBquerries;
+import com.ashish.mymall.ProductDetailsActivity;
 import com.ashish.mymall.R;
 import com.ashish.mymall.WishlistAdapter;
 import com.ashish.mymall.WishlistModel;
@@ -27,18 +30,37 @@ public class MyWishlistFragment extends Fragment {
     }
 
     private RecyclerView wishlistRecyclerView;
+    private Dialog loadingDialog;
+    public static WishlistAdapter wishlistAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_my_wishlist, container, false);
         wishlistRecyclerView=root.findViewById(R.id.my_wishlist_recyclerview);
 
+        //////////loading dialog
+
+        loadingDialog=new Dialog(getContext());
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
+
+        //////////loading dialog
+
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         wishlistRecyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WishlistModel> wishlistModelList=new ArrayList<>();
 
-        WishlistAdapter wishlistAdapter=new WishlistAdapter(wishlistModelList,true);
+        if(DBquerries.wishlistModelList.size() == 0){
+            DBquerries.wishlist.clear();
+            DBquerries.loadWishlist(getContext(),loadingDialog,true);
+        }else {
+            loadingDialog.dismiss();
+        }
+
+        wishlistAdapter=new WishlistAdapter(DBquerries.wishlistModelList,true);
         wishlistAdapter.notifyDataSetChanged();
         wishlistRecyclerView.setAdapter(wishlistAdapter);
         return root;

@@ -4,20 +4,26 @@ import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter {
 
     private List<CartItemModel> cartItemModelList;
-
+    private int lastpos=-1;
     public CartAdapter(List<CartItemModel> cartItemModelList) {
         this.cartItemModelList = cartItemModelList;
     }
@@ -56,27 +62,44 @@ public class CartAdapter extends RecyclerView.Adapter {
 
         switch (cartItemModelList.get(position).getType()){
             case CartItemModel.CART_ITEM:
-                int resource=cartItemModelList.get(position).getProductImage();
+                String productID=cartItemModelList.get(position).getProductID();
+                String resource=cartItemModelList.get(position).getProductImage();
                 String title=cartItemModelList.get(position).getProductTitle();
-                int freecoupans=cartItemModelList.get(position).getFreeCoupans();
+                Long freecoupans=cartItemModelList.get(position).getFreeCoupans();
                 String productprice=cartItemModelList.get(position).getProductPrice();
                 String cuttedPrice=cartItemModelList.get(position).getCuttedPrice();
-                int offersApplied=cartItemModelList.get(position).getOffersApplied();
+                Long offersApplied=cartItemModelList.get(position).getOffersApplied();
 
-                ((cartItemViewHolder)holder).setItemDetails(resource,title,freecoupans,productprice,cuttedPrice,offersApplied);
+                ((cartItemViewHolder)holder).setItemDetails(productID,resource,title,freecoupans,productprice,cuttedPrice,offersApplied,position);
                 break;
             case CartItemModel.TOTAL_AMOUNT:
 
-                String totalItems=cartItemModelList.get(position).getTotalItems();
-                String totalItemsPrice=cartItemModelList.get(position).getTotalItemPrice();
-                String deliveryPrice=cartItemModelList.get(position).getDeliveryPrice();
-                String savedAmount=cartItemModelList.get(position).getSavedAmount();
-                String totalAmount=cartItemModelList.get(position).getTotalAmount();
+                int totalItems=0,totalAmount,savedAmount=0;
+                int totalItemsPrice=0;
+                String deliveryPrice;
 
+                for(int x=0;x<cartItemModelList.size();x++){
+                    if(cartItemModelList.get(x).getType() == CartItemModel.CART_ITEM) {
+                        totalItems++;
+                        totalItemsPrice = totalItemsPrice + Integer.parseInt(cartItemModelList.get(x).getProductPrice());
+                    }
+                }
+                if(totalItemsPrice>500){
+                    deliveryPrice="FREE";
+                    totalAmount=totalItemsPrice;
+                }else {
+                    deliveryPrice="60";
+                    totalAmount=totalItemsPrice+60;
+                }
                 ((cartTotalAmountViewHolder)holder).setTotalAmount(totalItems,totalItemsPrice,deliveryPrice,totalAmount,savedAmount);
                 break;
             default:
                 return;
+        }
+        if(lastpos<position) {
+            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in);
+            holder.itemView.setAnimation(animation);
+            lastpos=position;
         }
     }
 
@@ -88,6 +111,7 @@ public class CartAdapter extends RecyclerView.Adapter {
     class cartItemViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView productImage,freeCoupanIcon;
+        private LinearLayout deleteBtn;
         private TextView productTitle, freeCoupans, productPrice,cuttedPrice,offersApplied,coupansApplied,productQuantity;
 
         public cartItemViewHolder(@NonNull View itemView) {
@@ -101,10 +125,12 @@ public class CartAdapter extends RecyclerView.Adapter {
             offersApplied=itemView.findViewById(R.id.offers_applied);
             coupansApplied=itemView.findViewById(R.id.coupans_applied);
             productQuantity=itemView.findViewById(R.id.product_quantity);
+            deleteBtn=itemView.findViewById(R.id.remove_item_btn);
         }
 
-        private void setItemDetails(int resource, String title, int freecoupansNo, String productPriceText, String cuttedPriceText,int offersAppliedNo){
-            productImage.setImageResource(resource);
+        private void setItemDetails(String productID, String resource, String title, Long freecoupansNo, String productPriceText, String cuttedPriceText, Long offersAppliedNo, final int position){
+            //productImage.setImageResource(resource);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(productImage);
             productTitle.setText(title);
             if(freecoupansNo>0){
                 freeCoupans.setVisibility(View.VISIBLE);
@@ -118,8 +144,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                 freeCoupans.setVisibility(View.INVISIBLE);
                 freeCoupanIcon.setVisibility(View.INVISIBLE);
             }
-            productPrice.setText(productPriceText);
-            cuttedPrice.setText(cuttedPriceText);
+            productPrice.setText("Rs."+productPriceText+"/-");
+            cuttedPrice.setText("Rs."+cuttedPriceText+"/-");
 
             if(offersAppliedNo>0){
                 offersApplied.setText(offersAppliedNo + " offers applied");
@@ -159,6 +185,17 @@ public class CartAdapter extends RecyclerView.Adapter {
                     qtyDialog.show();
                 }
             });
+
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!ProductDetailsActivity.running_cart_querry){
+                        ProductDetailsActivity.running_cart_querry=true;
+
+                        DBquerries.removeFromCart(position,itemView.getContext());
+                    }
+                }
+            });
         }
     }
 
@@ -174,12 +211,16 @@ public class CartAdapter extends RecyclerView.Adapter {
             totalAmount=itemView.findViewById(R.id.total_price);
             savedAmount=itemView.findViewById(R.id.saved_amount);
         }
-        private void setTotalAmount( String totalItemText, String totalItemPriceText,String deliveryPricetext,String totalAmounttext,String savedAmounttext){
-            totalItems.setText(totalItemText);
-            totalItemsPrice.setText(totalItemPriceText);
-            deliveryPrice.setText(deliveryPricetext);
-            totalAmount.setText(totalAmounttext);
-            savedAmount.setText(savedAmounttext);
+        private void setTotalAmount( int totalItemText, int totalItemPriceText,String deliveryPricetext,int totalAmounttext,int savedAmounttext){
+            totalItems.setText("Price("+totalItemText+" items");
+            totalItemsPrice.setText("Rs."+totalItemPriceText+"/-");
+            if(deliveryPricetext.equals("FREE")){
+                deliveryPrice.setText(deliveryPricetext);
+            }else {
+                deliveryPrice.setText("Rs."+deliveryPricetext+"/-");
+            }
+            totalAmount.setText("Rs."+totalAmounttext+"/-");
+            savedAmount.setText("You saved Rs."+savedAmounttext+"/- on this order.");
         }
     }
 }

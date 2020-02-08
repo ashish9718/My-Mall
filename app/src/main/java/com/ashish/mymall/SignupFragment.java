@@ -28,10 +28,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -196,7 +199,7 @@ public class SignupFragment extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
 
-                                    Map<String,Object> userdata= new HashMap<>();
+                                    final Map<String,Object> userdata= new HashMap<>();
                                     userdata.put("name",name.getText().toString());
 
                                     firebaseFirestore.collection("USERS").document(mAuth.getUid())
@@ -205,30 +208,54 @@ public class SignupFragment extends Fragment {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
-                                                        Map<String,Object> listsize= new HashMap<>();
-                                                        listsize.put("list_size", (long) 0);
-                                                        firebaseFirestore.collection("USERS").document(mAuth.getUid())
-                                                            .collection("USER_DATA").document("MY_WISHLIST")
-                                                            .set(listsize)
-                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<Void> task) {
-                                                                    if(task.isSuccessful()){
-                                                                        if(disableCloseBtn){
-                                                                            disableCloseBtn=false;
-                                                                        }else {
-                                                                            startActivity(new Intent(getActivity(),MainActivity.class));
+
+                                                        CollectionReference userDataReference=firebaseFirestore.collection("USERS").document(mAuth.getUid()).collection("USER_DATA");
+
+                                                        Map<String,Object> wishlistMap= new HashMap<>();
+                                                        wishlistMap.put("list_size", (long) 0);
+
+                                                        Map<String,Object> ratingsMap= new HashMap<>();
+                                                        ratingsMap.put("list_size", (long) 0);
+
+                                                        Map<String,Object> cartMap= new HashMap<>();
+                                                        cartMap.put("list_size", (long) 0);
+
+                                                        List<String> documentNames = new ArrayList<>();
+                                                        documentNames.add("MY_WISHLIST");
+                                                        documentNames.add("MY_RATINGS");
+                                                        documentNames.add("MY_CART");
+
+                                                        final List<Map<String,Object>> documentFields = new ArrayList<>();
+                                                        documentFields.add(wishlistMap);
+                                                        documentFields.add(ratingsMap);
+                                                        documentFields.add(cartMap);
+
+                                                        for (int x=0; x<documentNames.size() ;x++){
+                                                            final int finalX = x;
+                                                            userDataReference.document(documentNames.get(x))
+                                                                    .set(documentFields.get(x))
+                                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if(task.isSuccessful()){
+                                                                                if(finalX == documentFields.size()-1) {
+                                                                                    if (disableCloseBtn) {
+                                                                                        disableCloseBtn = false;
+                                                                                    } else {
+                                                                                        startActivity(new Intent(getActivity(), MainActivity.class));
+                                                                                    }
+                                                                                    getActivity().finish();
+                                                                                }
+                                                                            }else {
+                                                                                progressBar.setVisibility(View.INVISIBLE);
+                                                                                signupBtn.setEnabled(true);
+                                                                                signupBtn.setTextColor(Color.rgb(255,255,255));
+                                                                                String error=task.getException().getMessage();
+                                                                                Toast.makeText(getActivity(), error,Toast.LENGTH_SHORT).show();
+                                                                            }
                                                                         }
-                                                                        getActivity().finish();
-                                                                    }else {
-                                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                                        signupBtn.setEnabled(true);
-                                                                        signupBtn.setTextColor(Color.rgb(255,255,255));
-                                                                        String error=task.getException().getMessage();
-                                                                        Toast.makeText(getActivity(), error,Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                }
-                                                            });
+                                                                    });
+                                                        }
                                                     }
                                                     else {
                                                         String error=task.getException().getMessage();

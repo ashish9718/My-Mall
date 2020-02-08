@@ -42,10 +42,6 @@ public class DeliveryActivity extends AppCompatActivity {
         deliveryRecyclerView.setLayoutManager(linearLayoutManager);
 
         List<CartItemModel> cartItemModelList=new ArrayList<>();
-        cartItemModelList.add(new CartItemModel(0,R.mipmap.mobile,0,1,1,2,"Realme 5 pro","Rs.49999/-","Rs.59999/-"));
-        cartItemModelList.add(new CartItemModel(0,R.mipmap.mobile,2,2,0,1,"Realme 6 pro","Rs.49999/-","Rs.59999/-"));
-        cartItemModelList.add(new CartItemModel(0,R.mipmap.mobile,0,3,0,0,"Realme 7 pro","Rs.49999/-","Rs.59999/-"));
-        cartItemModelList.add(new CartItemModel(1,"Price (3 items)","Rs.499999/-","free","Rs.5999/-","Rs.499999/-"));
 
         CartAdapter cartAdapter=new CartAdapter(cartItemModelList);
         deliveryRecyclerView.setAdapter(cartAdapter);

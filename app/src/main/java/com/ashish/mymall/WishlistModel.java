@@ -5,11 +5,12 @@ import android.widget.ImageView;
 public class WishlistModel {
 
     private long freeCoupans,totalRatings;
-    private String productImage;
+    private String productImage,productId;
     private String productTitle,rating,productPrice,cuttedPrice;
     private Boolean COD;
 
-    public WishlistModel(String productImage, String productTitle,long freeCoupans, String rating, long totalRatings, String productPrice, String cuttedPrice, Boolean COD) {
+    public WishlistModel(String productId,String productImage, String productTitle,long freeCoupans, String rating, long totalRatings, String productPrice, String cuttedPrice, Boolean COD) {
+        this.productId=productId;
         this.freeCoupans = freeCoupans;
         this.totalRatings = totalRatings;
         this.productImage = productImage;
@@ -18,6 +19,14 @@ public class WishlistModel {
         this.productPrice = productPrice;
         this.cuttedPrice = cuttedPrice;
         this.COD = COD;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public long getFreeCoupans() {
