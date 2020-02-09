@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.ashish.mymall.ui.my_cart.MyCartFragment;
 
@@ -23,6 +24,7 @@ public class DeliveryActivity extends AppCompatActivity {
     private RecyclerView deliveryRecyclerView;
     private Button changeORaddNewAddressBtn;
     public final static int SELECT_ADDRESS =0;
+    private TextView totalAmount,fullname,fullAddress,pincode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,10 @@ public class DeliveryActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Delivery");
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        totalAmount=findViewById(R.id.total_cart_amount);
+        fullname=findViewById(R.id.fullname);
+        fullAddress=findViewById(R.id.address);
+        pincode=findViewById(R.id.pincode);
 
         deliveryRecyclerView=findViewById(R.id.delivery_recyclerview);
         changeORaddNewAddressBtn=findViewById(R.id.change_or_add_address_button);
@@ -41,9 +47,7 @@ public class DeliveryActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         deliveryRecyclerView.setLayoutManager(linearLayoutManager);
 
-        List<CartItemModel> cartItemModelList=new ArrayList<>();
-
-        CartAdapter cartAdapter=new CartAdapter(cartItemModelList);
+        CartAdapter cartAdapter=new CartAdapter(DBquerries.cartItemModelList,totalAmount,false);
         deliveryRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 
@@ -54,6 +58,9 @@ public class DeliveryActivity extends AppCompatActivity {
                 startActivity(new Intent(DeliveryActivity.this,MyAddressesActivity.class).putExtra("MODE",SELECT_ADDRESS));
             }
         });
+
+
+
 
     }
 
@@ -68,4 +75,12 @@ public class DeliveryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fullname.setText(DBquerries.addressesModelList.get(DBquerries.selectedAddress).getFullname());
+        fullAddress.setText(DBquerries.addressesModelList.get(DBquerries.selectedAddress).getAddress());
+        pincode.setText(DBquerries.addressesModelList.get(DBquerries.selectedAddress).getPincode());
+
+    }
 }

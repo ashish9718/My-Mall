@@ -19,11 +19,12 @@ import static com.ashish.mymall.ui.my_account.MyAccountFragment.MANAGE_ADDRESS;
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.ViewHolder> {
 
     private List<AddressesModel> addressesModelList;
-    private int MODE,preSelectedPos=-1;
+    private int MODE,preSelectedPos;
 
     public AddressesAdapter(List<AddressesModel> addressesModelList,int MODE) {
         this.addressesModelList = addressesModelList;
         this.MODE=MODE;
+        preSelectedPos=DBquerries.selectedAddress;
     }
 
     @NonNull
@@ -84,6 +85,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
                             addressesModelList.get(preSelectedPos).setSelected(false);
                             refreshItem(preSelectedPos, position);
                             preSelectedPos = position;
+                            DBquerries.selectedAddress=position;
                         }
                     }
                 });

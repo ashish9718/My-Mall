@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#AFA9A9"
+    android:background="@color/recyclerviewBackground"
     android:layout_marginBottom="4dp"
     android:layout_marginTop="4dp">
 

@@ -23,9 +23,13 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter {
 
     private List<CartItemModel> cartItemModelList;
+    private boolean showDeleteBtn;
     private int lastpos=-1;
-    public CartAdapter(List<CartItemModel> cartItemModelList) {
+    private TextView cartTotalAmount;
+    public CartAdapter(List<CartItemModel> cartItemModelList,TextView cartTotalAmount,boolean showDeleteBtn) {
         this.cartItemModelList = cartItemModelList;
+        this.cartTotalAmount=cartTotalAmount;
+        this.showDeleteBtn=showDeleteBtn;
     }
 
     @Override
@@ -186,12 +190,18 @@ public class CartAdapter extends RecyclerView.Adapter {
                 }
             });
 
+
+            if(showDeleteBtn){
+                deleteBtn.setVisibility(View.VISIBLE);
+            }else {
+                deleteBtn.setVisibility(View.GONE);
+            }
+
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(!ProductDetailsActivity.running_cart_querry){
                         ProductDetailsActivity.running_cart_querry=true;
-
                         DBquerries.removeFromCart(position,itemView.getContext());
                     }
                 }
@@ -220,6 +230,7 @@ public class CartAdapter extends RecyclerView.Adapter {
                 deliveryPrice.setText("Rs."+deliveryPricetext+"/-");
             }
             totalAmount.setText("Rs."+totalAmounttext+"/-");
+            cartTotalAmount.setText("Rs."+totalAmounttext+"/-");
             savedAmount.setText("You saved Rs."+savedAmounttext+"/- on this order.");
         }
     }

@@ -15,6 +15,7 @@ import com.ashish.mymall.ui.my_orders.MyOrdersFragment;
 import com.ashish.mymall.ui.my_rewards.MyRewardsFragment;
 import com.ashish.mymall.ui.my_wishlist.MyWishlistFragment;
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     public static DrawerLayout drawer;
     private FirebaseUser currentUser;
     private TextView badgeCount;
+    private int scrollFlags;
+    private AppBarLayout.LayoutParams params;
 
     NavigationView navigationView;
 
@@ -82,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
         window=getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        params= (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        scrollFlags=params.getScrollFlags();
 
         drawer = findViewById(id.drawer_layout);
         navigationView = findViewById(id.nav_view);
@@ -270,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
         setFragment(fragment,fragementNo);
         if(fragementNo==CART_FRAGMENT) {
             navigationView.getMenu().getItem(3).setChecked(true);
+            params.setScrollFlags(0);
+        }else {
+            params.setScrollFlags(scrollFlags);
         }
     }
 

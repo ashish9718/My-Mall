@@ -106,16 +106,15 @@
                     android:layout_weight="1"
                     android:textColor="@color/colorPrimary"/>
 
-                <EditText
-                    android:id="@+id/state"
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/state_spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="State*"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_background"
+                    android:backgroundTint="@color/recyclerviewBackground"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorPrimary"/>
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
