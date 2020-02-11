@@ -23,6 +23,13 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="paytmTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/recyclerviewBackground</item>
+        <item name="colorAccent">@android:color/holo_blue_dark</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

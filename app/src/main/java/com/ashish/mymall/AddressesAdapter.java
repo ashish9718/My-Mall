@@ -38,9 +38,10 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String name=addressesModelList.get(position).getFullname();
         String address=addressesModelList.get(position).getAddress();
+        String mobileNo=addressesModelList.get(position).getMobileNo();
         String pincode=addressesModelList.get(position).getPincode();
         Boolean selected=addressesModelList.get(position).getSelected();
-        holder.setdata(name,address,pincode,selected,position);
+        holder.setdata(name,address,pincode,selected,position,mobileNo);
     }
 
     @Override
@@ -63,8 +64,8 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
             optionContainer=itemView.findViewById(R.id.option_container);
         }
 
-        private void setdata(String name, String address, String pincode, Boolean selected, final int position){
-            fullname.setText(name);
+        private void setdata(String name, String address, String pincode, Boolean selected, final int position,String mobileNo){
+            fullname.setText(name+" - "+mobileNo);
             this.address.setText(address);
             this.pincode.setText(pincode);
 

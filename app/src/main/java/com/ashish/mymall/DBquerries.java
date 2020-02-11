@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -130,6 +131,7 @@ public class DBquerries {
                                                 ,queryDocumentSnapshot.get("product_price_"+x).toString()
                                                 ,queryDocumentSnapshot.get("cutted_price_"+x).toString()
                                                 ,(boolean)queryDocumentSnapshot.get("COD_"+x)
+                                                ,(boolean)queryDocumentSnapshot.get("in_stock_"+x)
                                         ));
                                     }
                                     lists.get(index).add(new MyMallModel(2,queryDocumentSnapshot.get("layout_title").toString(),queryDocumentSnapshot.get("layout_background").toString(),horizontalProductScrollModelList,viewAllProductList));
@@ -208,6 +210,7 @@ public class DBquerries {
                                                                 , task.getResult().get("product_price").toString()
                                                                 , task.getResult().get("cutted_price").toString()
                                                                 , (boolean) task.getResult().get("COD")
+                                                                ,(boolean)task.getResult().get("in_stock")
                                                         ));
                                                         MyWishlistFragment.wishlistAdapter.notifyDataSetChanged();
                                                     } else {
@@ -296,7 +299,7 @@ public class DBquerries {
         }
     }
 
-    public static void loadCartList(final Context context, final Dialog dialog,final boolean loadProductData,final TextView badgeCount){
+    public static void loadCartList(final Context context, final Dialog dialog,final boolean loadProductData,final TextView badgeCount,final TextView cartTotalAmount){
 
         cartList.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
@@ -336,9 +339,12 @@ public class DBquerries {
                                                                 , task.getResult().get("product_title").toString()
                                                                 , task.getResult().get("product_price").toString()
                                                                 , task.getResult().get("cutted_price").toString()
+                                                                ,(boolean)task.getResult().get("in_stock")
                                                                 ));
                                                         if(cartList.size() == 1){
                                                             cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+                                                            LinearLayout parent=(LinearLayout)cartTotalAmount.getParent().getParent();
+                                                            parent.setVisibility(View.VISIBLE);
                                                         }
                                                         if(cartList.size() == 0) {
                                                             cartItemModelList.clear();
@@ -372,7 +378,7 @@ public class DBquerries {
                 });
     }
 
-    public static void removeFromCart(final int index, final Context context) {
+    public static void removeFromCart(final int index, final Context context, final TextView cartTotalAmount) {
         final String removedProductId=cartList.get(index);
         cartList.remove(index);
 
@@ -394,6 +400,8 @@ public class DBquerries {
                                 MyCartFragment.cartAdapter.notifyDataSetChanged();
                             }
                             if(cartList.size() == 0) {
+                                LinearLayout parent=(LinearLayout)cartTotalAmount.getParent().getParent();
+                                parent.setVisibility(View.GONE);
                                 cartItemModelList.clear();
                             }
                             Toast.makeText(context,"Removed Successfully!",Toast.LENGTH_SHORT).show();
@@ -425,6 +433,7 @@ public class DBquerries {
                                             ,task.getResult().get("address_"+x).toString()
                                             ,task.getResult().get("pincode_"+x).toString()
                                             ,(boolean)task.getResult().get("selected_"+x)
+                                            ,task.getResult().get("mobile_no_"+x).toString()
                                     ));
                                     if((boolean)task.getResult().get("selected_"+x)){
                                         selectedAddress=Integer.parseInt(String.valueOf(x-1));
@@ -450,6 +459,9 @@ public class DBquerries {
         wishlistModelList.clear();
         cartList.clear();
         cartItemModelList.clear();
+        myRatedIds.clear();
+        myRating.clear();
+        addressesModelList.clear();
 
     }
 }

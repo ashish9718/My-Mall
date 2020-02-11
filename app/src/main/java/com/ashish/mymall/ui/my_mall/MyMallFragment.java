@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ashish.mymall.CategoryAdapter;
 import com.ashish.mymall.CategoryModel;
+import com.ashish.mymall.DBquerries;
 import com.ashish.mymall.HorizontalProductScrollModel;
 import com.ashish.mymall.MainActivity;
 import com.ashish.mymall.MyMallAdapter;
@@ -185,9 +186,10 @@ public class MyMallFragment extends Fragment {
 
     private void reloadPage(){
         networkInfo = connectivityManager.getActiveNetworkInfo();
-        categoryModelList.clear();
-        lists.clear();
-        loadedCategoriesNames.clear();
+//        categoryModelList.clear();
+//        lists.clear();
+//        loadedCategoriesNames.clear();
+        DBquerries.clearData();
         if(networkInfo != null && networkInfo.isConnected()==true){
             MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             noInternet.setVisibility(View.GONE);

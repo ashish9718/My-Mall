@@ -1,6 +1,7 @@
 package com.ashish.mymall;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         String productPrice=wishlistModelList.get(position).getProductPrice();
         String cuttedPrice=wishlistModelList.get(position).getCuttedPrice();
         Boolean paymentMethod=wishlistModelList.get(position).getCOD();
-        holder.setData(productId,resource,title,freeCoupans,rating,totalRatings,productPrice,cuttedPrice,paymentMethod,position);
+        boolean inStock=wishlistModelList.get(position).isInStock();
+        holder.setData(productId,resource,title,freeCoupans,rating,totalRatings,productPrice,cuttedPrice,paymentMethod,position,inStock);
         if(lastpos<position) {
             Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in);
             holder.itemView.setAnimation(animation);
@@ -83,10 +86,10 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             deleteBtn=itemView.findViewById(R.id.delete_btn);
         }
 
-        private void setData(final String productId, String resource, String title, long freeCoupansNo, String averageRate, long totalRatingsNo, String price, String cuttedPriceValue, Boolean payMethod, final int index){
+        private void setData(final String productId, String resource, String title, long freeCoupansNo, String averageRate, long totalRatingsNo, String price, String cuttedPriceValue, Boolean payMethod, final int index,boolean inStock){
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(productImage);
             productTitle.setText(title);
-            if(freeCoupansNo!=0){
+            if(freeCoupansNo!=0 && inStock){
                 coupanIcon.setVisibility(View.VISIBLE);
                 if(freeCoupansNo==1){
                     freeCoupans.setText("free "+freeCoupansNo+" coupan");
@@ -97,17 +100,33 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                 coupanIcon.setVisibility(View.INVISIBLE);
                 freeCoupans.setVisibility(View.INVISIBLE);
             }
-            rating.setText(averageRate);
-            totalRatings.setText("("+totalRatingsNo+")ratings");
-            productPrice.setText("Rs."+price+"/-");
-            cuttedPrice.setText("Rs."+cuttedPriceValue+"/-");
+            LinearLayout linearLayout= (LinearLayout) rating.getParent();
+            if(inStock) {
+                rating.setVisibility(View.VISIBLE);
+                totalRatings.setVisibility(View.VISIBLE);
+                cuttedPrice.setVisibility(View.VISIBLE);
+                productPrice.setTextColor(Color.parseColor("#000000"));
 
-            if(payMethod){
-                paymentMethod.setVisibility(View.VISIBLE);
+                rating.setText(averageRate);
+                totalRatings.setText("(" + totalRatingsNo + ")ratings");
+                productPrice.setText("Rs." + price + "/-");
+                cuttedPrice.setText("Rs." + cuttedPriceValue + "/-");
+
+                if (payMethod) {
+                    paymentMethod.setVisibility(View.VISIBLE);
+                } else {
+                    paymentMethod.setVisibility(View.INVISIBLE);
+                }
+                linearLayout.setVisibility(View.VISIBLE);
             }else {
+                linearLayout.setVisibility(View.INVISIBLE);
                 paymentMethod.setVisibility(View.INVISIBLE);
+                rating.setVisibility(View.INVISIBLE);
+                totalRatings.setVisibility(View.INVISIBLE);
+                cuttedPrice.setVisibility(View.INVISIBLE);
+                productPrice.setText("Out Of Stock");
+                productPrice.setTextColor(itemView.getContext().getResources().getColor(R.color.colorPrimary));
             }
-
 
             if(wishlist){
                 deleteBtn.setVisibility(View.VISIBLE);

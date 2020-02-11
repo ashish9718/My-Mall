@@ -1,5 +1,6 @@
 package com.ashish.mymall;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FrameLayout frameLayout;
-
+    public static Activity mainActivity;
     private static final int MyMallFragment=0,CART_FRAGMENT=1,ORDERS_FRAGMENT=2,WISHLIST_FRAGMENT=3,REWARDS_FRAGMENT=4,MYACCOUNT_FRAGMENT=5;
     private int currentFragment=-1;
     private ImageView actionbarLogo,noInternet;
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         frameLayout=findViewById(id.main_frame_layout);
 
         if(showCart){
+            mainActivity=this;
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             gotoFragment("My Cart",new MyCartFragment(),-2);
@@ -151,35 +153,43 @@ public class MainActivity extends AppCompatActivity {
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            MenuItem menuItem;
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                drawer.closeDrawers();
+                menuItem=item;
                 if(currentUser != null) {
-                    int id = menuItem.getItemId();
-                    if (id == R.id.nav_my_mall) {
-                        actionbarLogo.setVisibility(View.VISIBLE);
-                        invalidateOptionsMenu();
-                        setFragment(new MyMallFragment(), MyMallFragment);
-                        //navigationView.getMenu().getItem(0).setChecked(true);
-                    } else if (id == R.id.nav_my_orders) {
-                        gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
-                    } else if (id == R.id.nav_my_rewards) {
-                        gotoFragment("My Rewards", new MyRewardsFragment(), REWARDS_FRAGMENT);
-                    } else if (id == R.id.nav_my_cart) {
-                        gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
-                    } else if (id == R.id.nav_my_wishlist) {
-                        gotoFragment("My Wishlist", new MyWishlistFragment(), WISHLIST_FRAGMENT);
-                    } else if (id == R.id.nav_my_account) {
-                        gotoFragment("My Account", new MyAccountFragment(), MYACCOUNT_FRAGMENT);
-                    } else if (id == R.id.nav_sign_out) {
-                        FirebaseAuth.getInstance().signOut();
-                        DBquerries.clearData();
-                        startActivity(new Intent(MainActivity.this,RegisterActivity.class));
-                        finish();
-                    }
-                    drawer.closeDrawers();
+                    drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                        @Override
+                        public void onDrawerClosed(View drawerView) {
+                            super.onDrawerClosed(drawerView);
+                            int id = menuItem.getItemId();
+                            if (id == R.id.nav_my_mall) {
+                                actionbarLogo.setVisibility(View.VISIBLE);
+                                invalidateOptionsMenu();
+                                setFragment(new MyMallFragment(), MyMallFragment);
+                                //navigationView.getMenu().getItem(0).setChecked(true);
+                            } else if (id == R.id.nav_my_orders) {
+                                gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
+                            } else if (id == R.id.nav_my_rewards) {
+                                gotoFragment("My Rewards", new MyRewardsFragment(), REWARDS_FRAGMENT);
+                            } else if (id == R.id.nav_my_cart) {
+                                gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+                            } else if (id == R.id.nav_my_wishlist) {
+                                gotoFragment("My Wishlist", new MyWishlistFragment(), WISHLIST_FRAGMENT);
+                            } else if (id == R.id.nav_my_account) {
+                                gotoFragment("My Account", new MyAccountFragment(), MYACCOUNT_FRAGMENT);
+                            } else if (id == R.id.nav_sign_out) {
+                                FirebaseAuth.getInstance().signOut();
+                                DBquerries.clearData();
+                                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+                                finish();
+                            }
+                        }
+                    });
                     return true;
-                }else {
-                    drawer.closeDrawers();
+                }
+                else {
                     signInDialog.show();
                     return false;
                 }
@@ -215,8 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(currentUser!=null){
                 if(DBquerries.cartList.size() == 0){
-                    //badgeCount.setVisibility(View.INVISIBLE);
-                    DBquerries.loadCartList(MainActivity.this,new Dialog(MainActivity.this),false,badgeCount);
+                    DBquerries.loadCartList(MainActivity.this,new Dialog(MainActivity.this),false,badgeCount,new TextView(MainActivity.this));
                 }else {
                     badgeCount.setVisibility(View.VISIBLE);
                     if(DBquerries.cartList.size()<99) {
@@ -260,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if(id==android.R.id.home){
             if(showCart) {
+                mainActivity=null;
                 showCart = false;
                 finish();
                 return true;
@@ -274,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
         invalidateOptionsMenu();
         setFragment(fragment,fragementNo);
-        if(fragementNo==CART_FRAGMENT) {
+        if(fragementNo==CART_FRAGMENT || showCart) {
             navigationView.getMenu().getItem(3).setChecked(true);
             params.setScrollFlags(0);
         }else {
@@ -318,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onBackPressed();
             }else {
                 if(showCart){
+                    mainActivity=null;
                     showCart=false;
                     finish();
                 }else {
@@ -329,4 +340,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

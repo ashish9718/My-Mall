@@ -16,6 +16,7 @@
         android:layout_height="120dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/coupan_redemption_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/mobile" />
@@ -132,6 +133,7 @@
         android:gravity="right"
         android:orientation="horizontal"
         android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/remove_item_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coupans_applied">

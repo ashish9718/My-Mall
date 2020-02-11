@@ -24,6 +24,7 @@ import com.ashish.mymall.CartAdapter;
 import com.ashish.mymall.CartItemModel;
 import com.ashish.mymall.DBquerries;
 import com.ashish.mymall.DeliveryActivity;
+import com.ashish.mymall.ProductDetailsActivity;
 import com.ashish.mymall.R;
 
 import java.util.ArrayList;
@@ -62,12 +63,6 @@ public class MyCartFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemsRecyclerView.setLayoutManager(linearLayoutManager);
 
-        if(DBquerries.cartItemModelList.size() == 0){
-            DBquerries.cartList.clear();
-            DBquerries.loadCartList(getContext(),loadingDialog,true,new TextView(getContext()));
-        }else {
-            loadingDialog.dismiss();
-        }
 
 
         cartAdapter=new CartAdapter(DBquerries.cartItemModelList,totalAmount,true);
@@ -77,10 +72,40 @@ public class MyCartFragment extends Fragment {
         ContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DeliveryActivity.cartItemModelList=new ArrayList<>();
+                DeliveryActivity.fromCart=true;
+
+                for(int x=0;x<DBquerries.cartItemModelList.size();x++){
+                    CartItemModel cartItemModel=DBquerries.cartItemModelList.get(x);
+                    if(cartItemModel.isInStock()){
+                        DeliveryActivity.cartItemModelList.add(cartItemModel);
+                    }
+                }
+                DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
                 loadingDialog.show();
-                DBquerries.loadAddresses(getContext(),loadingDialog);
+                if(DBquerries.addressesModelList.size() == 0) {
+                    DBquerries.loadAddresses(getContext(), loadingDialog);
+                }else {
+                    loadingDialog.dismiss();
+                    startActivity(new Intent(getContext(), DeliveryActivity.class));
+                }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(DBquerries.cartItemModelList.size() == 0){
+            DBquerries.cartList.clear();
+            DBquerries.loadCartList(getContext(),loadingDialog,true,new TextView(getContext()),totalAmount);
+        }else {
+            if(DBquerries.cartItemModelList.get(DBquerries.cartItemModelList.size()-1).getType() == CartItemModel.TOTAL_AMOUNT){
+                LinearLayout parent=(LinearLayout)totalAmount.getParent().getParent();
+                parent.setVisibility(View.VISIBLE);
+            }
+            loadingDialog.dismiss();
+        }
     }
 }
