@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorAccent"
-    android:elevation="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:background="@color/colorAccent"
+    android:elevation="3dp">
 
     <ImageView
         android:id="@+id/product_image"
@@ -27,8 +26,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Real me 5 pro"
-        android:textSize="22sp"
         android:textColor="#000000"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,11 +48,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="Qty: 1"
         android:background="@drawable/border_background"
         android:backgroundTint="#000000"
-        android:textColor="#000000"
         android:padding="3dp"
+        android:text="Qty: 1"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="@+id/product_image"
         app:layout_constraintEnd_toStartOf="@+id/product_image" />
 
@@ -112,8 +111,8 @@
         android:layout_marginStart="9dp"
         android:layout_marginTop="8dp"
         android:progress="0"
-        android:progressTint="@color/successGreen"
         android:progressBackgroundTint="@color/recyclerviewBackground"
+        android:progressTint="@color/successGreen"
         android:rotation="90"
         android:transformPivotX="0dp"
         app:layout_constraintStart_toStartOf="@+id/packed_indicator"
@@ -138,9 +137,9 @@
         android:layout_marginStart="9dp"
         android:layout_marginTop="8dp"
         android:progress="0"
+        android:progressBackgroundTint="@color/recyclerviewBackground"
         android:progressTint="@color/successGreen"
         android:rotation="90"
-        android:progressBackgroundTint="@color/recyclerviewBackground"
         android:transformPivotX="0dp"
         app:layout_constraintStart_toStartOf="@+id/shipping_indicator"
         app:layout_constraintTop_toTopOf="@+id/shipping_indicator" />
@@ -183,8 +182,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Your order has been placed."
-        android:textSize="12sp"
         android:textColor="#000000"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/ordered_title"
         app:layout_constraintTop_toBottomOf="@+id/ordered_title" />
 
@@ -216,8 +215,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Your order has been packed."
-        android:textSize="12sp"
         android:textColor="#000000"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/packed_title"
         app:layout_constraintTop_toBottomOf="@+id/packed_title" />
 
@@ -248,8 +247,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Your order has been shipped."
-        android:textSize="12sp"
         android:textColor="#000000"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/shipping_title"
         app:layout_constraintTop_toBottomOf="@+id/shipping_title" />
 
@@ -301,7 +300,7 @@
         android:id="@+id/Divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -314,9 +313,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -368,5 +365,27 @@
             android:tint="#C7BEBE" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/cancel_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Cancel Order"
+        android:visibility="gone"
+        android:textAllCaps="false"
+        android:background="@drawable/slider_background"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textSize="17sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rate_now_container" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

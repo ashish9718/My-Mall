@@ -92,10 +92,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="Offers applied"
-        android:textSize="12sp"
         android:textColor="#4CAF50"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_price" />
+        app:layout_constraintTop_toBottomOf="@+id/product_price"
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/coupans_applied"
@@ -103,10 +104,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="Coupans applied"
-        android:textSize="12sp"
         android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offers_applied" />
+        app:layout_constraintTop_toBottomOf="@+id/offers_applied"
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/product_quantity"
@@ -143,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Check price after coupan redemption"
+            android:text="Apply  Your Coupan Here."
             android:textAlignment="center"
             android:textColor="@color/colorAccent" />
 
@@ -180,5 +182,15 @@
             android:drawableStart="@drawable/bin"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/cod_indicator"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/product_price"
+        app:layout_constraintEnd_toEndOf="@+id/product_title"
+        app:layout_constraintTop_toTopOf="@+id/product_title"
+        app:srcCompat="@mipmap/cod1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

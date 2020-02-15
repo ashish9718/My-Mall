@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private TextView badgeCount;
     private int scrollFlags;
+    public static  boolean resetMainActivity=false;
     private AppBarLayout.LayoutParams params;
 
     NavigationView navigationView;
@@ -206,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
         }else {
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
+        }
+        if(resetMainActivity){
+            actionbarLogo.setVisibility(View.VISIBLE);
+            resetMainActivity=false;
+            setFragment(new MyMallFragment(),MyMallFragment);
+            navigationView.getMenu().getItem(0).setChecked(true);
         }
         invalidateOptionsMenu();
     }

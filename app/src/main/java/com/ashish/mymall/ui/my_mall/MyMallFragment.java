@@ -70,6 +70,7 @@ public class MyMallFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(getContext().getResources().getColor(R.color.colorPrimary),getContext().getResources().getColor(R.color.colorPrimary),getContext().getResources().getColor(R.color.colorPrimary));
 
 
+
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(linearLayoutManager);
@@ -140,7 +141,6 @@ public class MyMallFragment extends Fragment {
                 categoryAdapter=new CategoryAdapter(categoryModelList);
                 categoryAdapter.notifyDataSetChanged();
             }
-
             categoryRecyclerView.setAdapter(categoryAdapter);
 
             if(lists.size() == 0){

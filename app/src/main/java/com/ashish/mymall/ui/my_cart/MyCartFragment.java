@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import com.ashish.mymall.DBquerries;
 import com.ashish.mymall.DeliveryActivity;
 import com.ashish.mymall.ProductDetailsActivity;
 import com.ashish.mymall.R;
+import com.ashish.mymall.RewardModel;
+import com.ashish.mymall.ui.my_rewards.MyRewardsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +66,6 @@ public class MyCartFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemsRecyclerView.setLayoutManager(linearLayoutManager);
 
-
-
         cartAdapter=new CartAdapter(DBquerries.cartItemModelList,totalAmount,true);
         cartItemsRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
@@ -97,6 +98,13 @@ public class MyCartFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        cartAdapter.notifyDataSetChanged();
+
+        if(DBquerries.rewardModelList.size() == 0){
+            loadingDialog.show();
+            DBquerries.loadRewards(getContext(),loadingDialog,false);
+        }
+
         if(DBquerries.cartItemModelList.size() == 0){
             DBquerries.cartList.clear();
             DBquerries.loadCartList(getContext(),loadingDialog,true,new TextView(getContext()),totalAmount);
@@ -106,6 +114,25 @@ public class MyCartFragment extends Fragment {
                 parent.setVisibility(View.VISIBLE);
             }
             loadingDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for(CartItemModel cartItemModel:DBquerries.cartItemModelList){
+            if(!TextUtils.isEmpty(cartItemModel.getSelectedCoupanId())){
+                for(RewardModel rewardModel: DBquerries.rewardModelList){
+                    if(rewardModel.getCoupanId().equals(cartItemModel.getSelectedCoupanId())){
+                        rewardModel.setAlreadyUsed(false);
+
+                    }
+                }
+                cartItemModel.setSelectedCoupanId(null);
+                if(MyRewardsFragment.rewardsAdapter != null){
+                    MyRewardsFragment.rewardsAdapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 }

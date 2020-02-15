@@ -1,5 +1,6 @@
 package com.ashish.mymall;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartItemModel {
@@ -18,11 +19,20 @@ public class CartItemModel {
 
     /////////cart item
 
-    private Long freeCoupans, productQuantity, offersApplied, coupansApplied;
-    private String productID,productImage,productTitle, productPrice, cuttedPrice;
-    private boolean inStock;
+    private Long freeCoupans, productQuantity, offersApplied, coupansApplied,maxQuantity,stockQuantity;
+    private String productID,productImage,productTitle, productPrice,discountedPrice, cuttedPrice,selectedCoupanId;
+    private boolean inStock,qtyError,COD;
+    private List<String> qtyIDs;
 
-    public CartItemModel(int type,String productID,String productImage, Long freeCoupans, Long productQuantity, Long offersApplied, Long coupansApplied, String productTitle, String productPrice, String cuttedPrice,boolean inStock) {
+    public String getDiscountedPrice() {
+        return discountedPrice;
+    }
+
+    public void setDiscountedPrice(String discountedPrice) {
+        this.discountedPrice = discountedPrice;
+    }
+
+    public CartItemModel(int type, String productID, String productImage, Long freeCoupans, Long productQuantity, Long offersApplied, Long coupansApplied, String productTitle, String productPrice, String cuttedPrice, boolean inStock, Long maxQuantity, Long stockQuantity,boolean COD) {
         this.type=type;
         this.productID=productID;
         this.productImage = productImage;
@@ -34,6 +44,60 @@ public class CartItemModel {
         this.productPrice = productPrice;
         this.cuttedPrice = cuttedPrice;
         this.inStock=inStock;
+        this.maxQuantity=maxQuantity;
+        this.stockQuantity=stockQuantity;
+        qtyIDs=new ArrayList<>();
+        qtyError=false;
+        this.COD=COD;
+
+    }
+
+    public boolean isCOD() {
+        return COD;
+    }
+
+    public void setCOD(boolean COD) {
+        this.COD = COD;
+    }
+
+    public String getSelectedCoupanId() {
+        return selectedCoupanId;
+    }
+
+    public void setSelectedCoupanId(String selectedCoupanId) {
+        this.selectedCoupanId = selectedCoupanId;
+    }
+
+    public boolean isQtyError() {
+        return qtyError;
+    }
+
+    public void setQtyError(boolean qtyError) {
+        this.qtyError = qtyError;
+    }
+
+    public Long getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(Long stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public List<String> getQtyIDs() {
+        return qtyIDs;
+    }
+
+    public void setQtyIDs(List<String> qtyIDs) {
+        this.qtyIDs = qtyIDs;
+    }
+
+    public Long getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(Long maxQuantity) {
+        this.maxQuantity = maxQuantity;
     }
 
     public boolean isInStock() {
@@ -119,13 +183,53 @@ public class CartItemModel {
     /////////cart item
 
     /////////cart total
+    private int totalItems,totalItemsPrice,totalAmount,savedAmount;
+    private String deliveryPrice;
 
     public CartItemModel(int type) {
         this.type = type;
     }
 
+    public int getTotalItems() {
+        return totalItems;
+    }
 
-    /////////cart total
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+
+    public int getTotalItemsPrice() {
+        return totalItemsPrice;
+    }
+
+    public void setTotalItemsPrice(int totalItemsPrice) {
+        this.totalItemsPrice = totalItemsPrice;
+    }
+
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public int getSavedAmount() {
+        return savedAmount;
+    }
+
+    public void setSavedAmount(int savedAmount) {
+        this.savedAmount = savedAmount;
+    }
+
+    public String getDeliveryPrice() {
+        return deliveryPrice;
+    }
+
+    public void setDeliveryPrice(String deliveryPrice) {
+        this.deliveryPrice = deliveryPrice;
+    }
+/////////cart total
 
 
 }
