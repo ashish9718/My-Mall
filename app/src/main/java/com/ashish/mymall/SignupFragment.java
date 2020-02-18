@@ -201,6 +201,8 @@ public class SignupFragment extends Fragment {
 
                                     final Map<String,Object> userdata= new HashMap<>();
                                     userdata.put("name",name.getText().toString());
+                                    userdata.put("email",email.getText().toString());
+                                    userdata.put("profile","");
 
                                     firebaseFirestore.collection("USERS").document(mAuth.getUid())
                                             .set(userdata)
@@ -223,17 +225,22 @@ public class SignupFragment extends Fragment {
                                                         Map<String,Object> myAddressesMap= new HashMap<>();
                                                         myAddressesMap.put("list_size", (long) 0);
 
+                                                        Map<String,Object> notificationMap= new HashMap<>();
+                                                        notificationMap.put("list_size", (long) 0);
+
                                                         List<String> documentNames = new ArrayList<>();
                                                         documentNames.add("MY_WISHLIST");
                                                         documentNames.add("MY_RATINGS");
                                                         documentNames.add("MY_CART");
                                                         documentNames.add("MY_ADDRESSES");
+                                                        documentNames.add("MY_NOTIFICATIONS");
 
                                                         final List<Map<String,Object>> documentFields = new ArrayList<>();
                                                         documentFields.add(wishlistMap);
                                                         documentFields.add(ratingsMap);
                                                         documentFields.add(cartMap);
                                                         documentFields.add(myAddressesMap);
+                                                        documentFields.add(notificationMap);
 
                                                         for (int x=0; x<documentNames.size() ;x++){
                                                             final int finalX = x;

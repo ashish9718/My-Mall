@@ -2,6 +2,9 @@ package com.ashish.mymall;
 
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WishlistModel {
 
     private long freeCoupans,totalRatings;
@@ -9,6 +12,7 @@ public class WishlistModel {
     private String productTitle,rating,productPrice,cuttedPrice;
     private Boolean COD;
     private boolean inStock;
+    private ArrayList<String>tags;
 
     public WishlistModel(String productId,String productImage, String productTitle,long freeCoupans, String rating, long totalRatings, String productPrice, String cuttedPrice, Boolean COD,boolean inStock) {
         this.productId=productId;
@@ -21,6 +25,14 @@ public class WishlistModel {
         this.cuttedPrice = cuttedPrice;
         this.COD = COD;
         this.inStock=inStock;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 
     public boolean isInStock() {

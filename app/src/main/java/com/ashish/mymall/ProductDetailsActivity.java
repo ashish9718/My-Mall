@@ -53,6 +53,7 @@ import static com.ashish.mymall.RegisterActivity.setsignUpFragment;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
+    public static boolean fromSearch=false;
     private Long productPriceValue;
     private boolean inStock=false;
     private TextView badgeCount;
@@ -632,7 +633,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
 
                     if(DBquerries.addressesModelList.size() == 0) {
-                        DBquerries.loadAddresses(ProductDetailsActivity.this, loadingDialog);
+                        DBquerries.loadAddresses(ProductDetailsActivity.this, loadingDialog,true);
                     }else {
                         loadingDialog.dismiss();
                         startActivity(new Intent(ProductDetailsActivity.this, DeliveryActivity.class));
@@ -819,6 +820,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.main_search_icon) {
+            if(fromSearch) {
+                finish();
+            }else {
+                startActivity(new Intent(this,SearchActivity.class));
+            }
             return true;
         } else if (id == android.R.id.home) {
             productDetailsActivity=null;
@@ -843,4 +849,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fromSearch=false;
+    }
 }

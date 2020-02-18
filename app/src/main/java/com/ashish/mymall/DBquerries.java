@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashish.mymall.ui.my_cart.MyCartFragment;
@@ -23,7 +24,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DBquerries {
+    public static String email,fullname,profile;
 
     public static FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
     public static List<CategoryModel> categoryModelList=new ArrayList<>();
@@ -56,6 +61,10 @@ public class DBquerries {
     public static List<RewardModel> rewardModelList=new ArrayList<>();
 
     public static List<MyOrderItemModel> myOrderItemModelList=new ArrayList<>();
+
+    public static List<NotificationModel> notificationModelList=new ArrayList<>();
+
+    private static ListenerRegistration registration;
 
     public static int selectedAddress=-1;
 
@@ -499,7 +508,7 @@ public class DBquerries {
 
     }
 
-    public static void loadAddresses(final Context context, final Dialog loadingDialog){
+    public static void loadAddresses(final Context context, final Dialog loadingDialog, final boolean gotoDeliveryActivity){
         addressesModelList.clear();
 
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_ADDRESSES").get()
@@ -512,17 +521,25 @@ public class DBquerries {
                             }else {
                                 for(long x=1;x<=(long)task.getResult().get("list_size");x++){
                                     addressesModelList.add(new AddressesModel(
-                                            task.getResult().get("fullname_"+x).toString()
-                                            ,task.getResult().get("address_"+x).toString()
+                                             task.getResult().get("city_"+x).toString()
+                                            ,task.getResult().get("locality_"+x).toString()
+                                            ,task.getResult().get("flat_no_"+x).toString()
                                             ,task.getResult().get("pincode_"+x).toString()
-                                            ,(boolean)task.getResult().get("selected_"+x)
+                                            ,task.getResult().get("landmark_"+x).toString()
+                                            ,task.getResult().get("name_"+x).toString()
                                             ,task.getResult().get("mobile_no_"+x).toString()
+                                            ,task.getResult().get("alternate_mobile_no_"+x).toString()
+                                            ,task.getResult().get("state_"+x).toString()
+                                            ,(boolean)task.getResult().get("selected_"+x)
+
                                     ));
                                     if((boolean)task.getResult().get("selected_"+x)){
                                         selectedAddress=Integer.parseInt(String.valueOf(x-1));
                                     }
                                 }
-                                context.startActivity(new Intent(context, DeliveryActivity.class));
+                                if (gotoDeliveryActivity) {
+                                    context.startActivity(new Intent(context, DeliveryActivity.class));
+                                }
                             }
                         }else {
                             String error=task.getException().getMessage();
@@ -598,7 +615,7 @@ public class DBquerries {
 
     }
 
-    public static void loadOrders(final Context context, final MyOrderAdapter myOrderAdapter,final Dialog loadingDialog){
+    public static void loadOrders(final Context context, @Nullable final MyOrderAdapter myOrderAdapter, final Dialog loadingDialog){
         myOrderItemModelList.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .collection("USER_ORDERS").orderBy("time", Query.Direction.DESCENDING).get()
@@ -644,7 +661,9 @@ public class DBquerries {
                                                         myOrderItemModelList.add(myOrderItemModel);
                                                     }
                                                     loadRatingList(context);
-                                                    myOrderAdapter.notifyDataSetChanged();
+                                                    if(myOrderAdapter != null){
+                                                        myOrderAdapter.notifyDataSetChanged();
+                                                    }
                                                 }else {
                                                     String error = task.getException().getMessage();
                                                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -663,6 +682,53 @@ public class DBquerries {
                 });
     }
 
+    public static void checkNotifications(boolean remove,@Nullable final TextView notifycount){
+
+        if(remove){
+            registration.remove();
+        }else {
+            registration=firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_NOTIFICATIONS")
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                            if(documentSnapshot != null && documentSnapshot.exists()) {
+                                notificationModelList.clear();
+                                int unread=0;
+                                for (long x = 0; x < (long) documentSnapshot.get("list_size"); x++) {
+                                    notificationModelList.add(0,new NotificationModel(
+                                            documentSnapshot.getString("image_"+x)
+                                            ,documentSnapshot.getString("body_"+x)
+                                            ,documentSnapshot.getBoolean("readed_"+x)
+
+                                    ));
+                                    if(!documentSnapshot.getBoolean("readed_"+x)){
+                                       unread++;
+                                       if(notifycount != null){
+                                           if(unread>0) {
+                                               notifycount.setVisibility(View.VISIBLE);
+                                               if (unread < 99) {
+                                                   notifycount.setText(String.valueOf(unread));
+                                               } else {
+                                                   notifycount.setText("99");
+                                               }
+                                           }else {
+                                               notifycount.setVisibility(View.INVISIBLE);
+                                           }
+                                       }
+                                    }
+                                }
+                                if(NotificationActivity.adapter != null){
+                                    NotificationActivity.adapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    });
+        }
+
+
+
+    }
+
     public static void clearData(){
 
         categoryModelList.clear();
@@ -677,6 +743,7 @@ public class DBquerries {
         addressesModelList.clear();
         rewardModelList.clear();
         myOrderItemModelList.clear();
+
 
     }
 }

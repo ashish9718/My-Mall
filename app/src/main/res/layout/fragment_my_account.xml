@@ -11,14 +11,18 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/layout_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <include layout="@layout/profile_data_layout"/>
-            <include layout="@layout/order_status_layout"/>
-            <include layout="@layout/your_recent_orders_layout"/>
-            <include layout="@layout/my_addresses_layout"/>
+            <include layout="@layout/profile_data_layout" />
+
+            <include layout="@layout/order_status_layout" />
+
+            <include layout="@layout/your_recent_orders_layout" />
+
+            <include layout="@layout/my_addresses_layout" />
 
             <Button
                 android:id="@+id/sign_out_btn"
@@ -30,8 +34,8 @@
                 android:background="@drawable/slider_background"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="Sign Out"
-                android:textSize="16dp"
                 android:textColor="@color/colorAccent"
+                android:textSize="16dp"
                 android:textStyle="bold" />
 
         </LinearLayout>

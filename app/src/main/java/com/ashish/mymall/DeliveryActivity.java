@@ -283,10 +283,25 @@ public class DeliveryActivity extends AppCompatActivity {
             getQTYIDs = true;
         }
         ///////accessing quantity
-        name = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getFullname();
+        name = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getName();
         mobileNo = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getMobileNo();
-        fullname.setText(name + " - " + mobileNo);
-        fullAddress.setText(DBquerries.addressesModelList.get(DBquerries.selectedAddress).getAddress());
+        if(DBquerries.addressesModelList.get(DBquerries.selectedAddress).getAlternateMobileNo().equals("")){
+            fullname.setText(name + " - " + mobileNo);
+        }else {
+            fullname.setText(name + " - " + mobileNo+" or "+DBquerries.addressesModelList.get(DBquerries.selectedAddress).getAlternateMobileNo());
+        }
+
+        String flatNo = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getFlatNo();
+        String city = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getCity();
+        String locality = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getLocality();
+        String landmark = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getLandmark();
+        String state = DBquerries.addressesModelList.get(DBquerries.selectedAddress).getState();
+
+        if(landmark.equals("")){
+            fullAddress.setText(flatNo+","+locality+","+city+","+state);
+        }else {
+            fullAddress.setText(flatNo+","+locality+","+landmark+","+city+","+state);
+        }
         pincode.setText(DBquerries.addressesModelList.get(DBquerries.selectedAddress).getPincode());
 
         if (codOrderConfirmed) {

@@ -16,6 +16,9 @@ import com.ashish.mymall.ui.my_orders.MyOrdersFragment;
 import com.ashish.mymall.ui.my_rewards.MyRewardsFragment;
 import com.ashish.mymall.ui.my_wishlist.MyWishlistFragment;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +40,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -51,6 +57,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.ashish.mymall.R.*;
 import static com.ashish.mymall.RegisterActivity.setsignUpFragment;
@@ -73,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private int scrollFlags;
     public static  boolean resetMainActivity=false;
     private AppBarLayout.LayoutParams params;
+    private CircularImageView addProfileIcon;
+    private CircleImageView profileView;
+    private TextView fullname,email;
 
     NavigationView navigationView;
 
@@ -107,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
         navigationView.getMenu().getItem(0).setChecked(true);
 
         frameLayout=findViewById(id.main_frame_layout);
+
+        fullname=navigationView.getHeaderView(0).findViewById(id.main_name);
+        email=navigationView.getHeaderView(0).findViewById(id.main_email);
+        addProfileIcon=navigationView.getHeaderView(0).findViewById(id.add_profile_image_icon);
+        profileView=navigationView.getHeaderView(0).findViewById(id.main_profile_pic);
 
         if(showCart){
             mainActivity=this;
@@ -186,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(new Intent(MainActivity.this,RegisterActivity.class));
                                 finish();
                             }
+                            drawer.removeDrawerListener(this);
                         }
                     });
                     return true;
@@ -205,7 +223,44 @@ public class MainActivity extends AppCompatActivity {
         currentUser= FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser == null){
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
-        }else {
+        }
+        else {
+            if(DBquerries.email == null) {
+                FirebaseFirestore.getInstance().collection("USERS").document(currentUser.getUid())
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DBquerries.fullname = task.getResult().getString("name");
+                            DBquerries.email = task.getResult().getString("email");
+                            DBquerries.profile = task.getResult().getString("profile");
+
+                            fullname.setText(DBquerries.fullname);
+                            email.setText(DBquerries.email);
+                            if (DBquerries.profile.equals("")) {
+                                addProfileIcon.setVisibility(View.VISIBLE);
+                            } else {
+                                addProfileIcon.setVisibility(View.INVISIBLE);
+                                Glide.with(MainActivity.this).load(DBquerries.profile).apply(new RequestOptions().placeholder(mipmap.user_blue)).into(profileView);
+                            }
+                        } else {
+                            String error = task.getException().getMessage();
+                            Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }else {
+                fullname.setText(DBquerries.fullname);
+                email.setText(DBquerries.email);
+                if (DBquerries.profile.equals("")) {
+                    profileView.setImageResource(mipmap.user_blue);
+                    addProfileIcon.setVisibility(View.VISIBLE);
+                } else {
+                    addProfileIcon.setVisibility(View.INVISIBLE);
+                    Glide.with(MainActivity.this).load(DBquerries.profile).apply(new RequestOptions().placeholder(mipmap.user_blue)).into(profileView);
+                }
+            }
+
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
         }
         if(resetMainActivity){
@@ -215,6 +270,13 @@ public class MainActivity extends AppCompatActivity {
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DBquerries.checkNotifications(true,null);
+
     }
 
     @Override
@@ -230,6 +292,27 @@ public class MainActivity extends AppCompatActivity {
             badgeIcon.setImageResource(drawable.shopping_cart);
             badgeCount=cartItem.getActionView().findViewById(id.badge_count);
 
+
+            MenuItem notificationItem = menu.findItem(id.main_notification_icon);
+            notificationItem.setActionView(layout.badge_layout);
+            ImageView badgeeIcon=notificationItem.getActionView().findViewById(id.badge_icon);
+            badgeeIcon.setImageResource(drawable.notification);
+            TextView notifyCount=notificationItem.getActionView().findViewById(id.badge_count);
+
+            if(currentUser!=null){
+                DBquerries.checkNotifications(false,notifyCount);
+            }
+            notificationItem.getActionView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(currentUser == null){
+                        signInDialog.show();
+                    }else {
+                        startActivity(new Intent(MainActivity.this,NotificationActivity.class));
+                    }
+                }
+            });
+
             if(currentUser!=null){
                 if(DBquerries.cartList.size() == 0){
                     DBquerries.loadCartList(MainActivity.this,new Dialog(MainActivity.this),false,badgeCount,new TextView(MainActivity.this));
@@ -241,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
                         badgeCount.setText("99");
                     }
                 }
+
             }
             cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -263,8 +347,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id==R.id.main_search_icon){
+            startActivity(new Intent(MainActivity.this,SearchActivity.class));
             return true;
         }else if(id==R.id.main_notification_icon){
+            startActivity(new Intent(MainActivity.this,NotificationActivity.class));
             return true;
         }else if(id==R.id.main_cart_icon){
             if(currentUser == null){

@@ -16,7 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OTPverificationActivity"></activity>
+        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".UpdateUserInfoActivity" />
+        <activity android:name=".OTPverificationActivity" />
         <activity android:name=".ViewAllActivity" />
         <activity android:name=".MyAddressesActivity" />
         <activity
