@@ -38,6 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class DBquerries {
     public static String email,fullname,profile;
 
@@ -617,69 +619,74 @@ public class DBquerries {
 
     public static void loadOrders(final Context context, @Nullable final MyOrderAdapter myOrderAdapter, final Dialog loadingDialog){
         myOrderItemModelList.clear();
-        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
-                .collection("USER_ORDERS").orderBy("time", Query.Direction.DESCENDING).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(DocumentSnapshot documentSnapshot: task.getResult().getDocuments()){
-                                firebaseFirestore.collection("ORDERS").document(documentSnapshot.get("order_id").toString())
-                                        .collection("ORDER_ITEMS").get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if(task.isSuccessful()){
-                                                    for(DocumentSnapshot orderItems: task.getResult().getDocuments()){
+            firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                    .collection("USER_ORDERS").orderBy("time", Query.Direction.DESCENDING).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(!task.getResult().isEmpty()) {
+                                if (task.isSuccessful()) {
+                                    for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
+                                        firebaseFirestore.collection("ORDERS").document(documentSnapshot.get("order_id").toString())
+                                                .collection("ORDER_ITEMS").get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            //Toasty.success(context,"order mil gya",Toasty.LENGTH_SHORT,true).show();
+                                                            for (DocumentSnapshot orderItems : task.getResult().getDocuments()) {
 
-                                                        MyOrderItemModel myOrderItemModel=new MyOrderItemModel(
-                                                                orderItems.getString("Product Id")
-                                                                ,orderItems.getString("Order Status")
-                                                                ,orderItems.getString("Address")
-                                                                ,orderItems.getString("Coupan Id")
-                                                                ,orderItems.getString("Product Price")
-                                                                ,orderItems.getString("Cutted Price")
-                                                                ,orderItems.getString("Discounted Price")
-                                                                ,(Date) orderItems.get("Ordered Date")
-                                                                ,(Date)orderItems.get("Packed Date")
-                                                                ,(Date)orderItems.get("Shipped Date")
-                                                                ,(Date)orderItems.get("Delivered Date")
-                                                                ,(Date)orderItems.get("Cancelled Date")
-                                                                ,orderItems.getLong("Free Coupens")
-                                                                ,orderItems.getLong("Product quantity")
-                                                                ,orderItems.getString("FullName")
-                                                                ,orderItems.getString("ORDER ID")
-                                                                ,orderItems.getString("Payment Method")
-                                                                ,orderItems.getString("Pincode")
-                                                                ,orderItems.getString("User Id")
-                                                                ,orderItems.getString("Product Title")
-                                                                ,orderItems.getString("Product Image")
-                                                                ,orderItems.getString("Delivery Price")
-                                                                ,(boolean)orderItems.get("Cancellation requested")
+                                                                MyOrderItemModel myOrderItemModel = new MyOrderItemModel(
+                                                                        orderItems.getString("Product Id")
+                                                                        , orderItems.getString("Order Status")
+                                                                        , orderItems.getString("Address")
+                                                                        , orderItems.getString("Coupan Id")
+                                                                        , orderItems.getString("Product Price")
+                                                                        , orderItems.getString("Cutted Price")
+                                                                        , orderItems.getString("Discounted Price")
+                                                                        , (Date) orderItems.get("Ordered Date")
+                                                                        , (Date) orderItems.get("Packed Date")
+                                                                        , (Date) orderItems.get("Shipped Date")
+                                                                        , (Date) orderItems.get("Delivered Date")
+                                                                        , (Date) orderItems.get("Cancelled Date")
+                                                                        , orderItems.getLong("Free Coupens")
+                                                                        , orderItems.getLong("Product quantity")
+                                                                        , orderItems.getString("FullName")
+                                                                        , orderItems.getString("ORDER ID")
+                                                                        , orderItems.getString("Payment Method")
+                                                                        , orderItems.getString("Pincode")
+                                                                        , orderItems.getString("User Id")
+                                                                        , orderItems.getString("Product Title")
+                                                                        , orderItems.getString("Product Image")
+                                                                        , orderItems.getString("Delivery Price")
+                                                                        , (boolean) orderItems.get("Cancellation requested")
 
-                                                        );
-                                                        myOrderItemModelList.add(myOrderItemModel);
+                                                                );
+                                                                myOrderItemModelList.add(myOrderItemModel);
+                                                            }
+                                                            loadRatingList(context);
+                                                            if (myOrderAdapter != null) {
+                                                                myOrderAdapter.notifyDataSetChanged();
+                                                            }
+                                                        } else {
+                                                            String error = task.getException().getMessage();
+                                                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        loadingDialog.dismiss();
                                                     }
-                                                    loadRatingList(context);
-                                                    if(myOrderAdapter != null){
-                                                        myOrderAdapter.notifyDataSetChanged();
-                                                    }
-                                                }else {
-                                                    String error = task.getException().getMessage();
-                                                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-                                                }
-                                                loadingDialog.dismiss();
-                                            }
-                                        });
-
+                                                });
+                                    }
+                                } else {
+                                    loadingDialog.dismiss();
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                                }
+                            }else {
+                                loadingDialog.dismiss();
                             }
-                        } else {
-                        loadingDialog.dismiss();
-                        String error = task.getException().getMessage();
-                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-                    }
-                    }
-                });
+                        }
+                    });
+
     }
 
     public static void checkNotifications(boolean remove,@Nullable final TextView notifycount){
@@ -743,7 +750,6 @@ public class DBquerries {
         addressesModelList.clear();
         rewardModelList.clear();
         myOrderItemModelList.clear();
-
 
     }
 }

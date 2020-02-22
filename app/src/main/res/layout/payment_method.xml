@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
@@ -47,7 +48,7 @@
         app:layout_constraintEnd_toStartOf="@+id/payment_divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView24"
-        app:srcCompat="@mipmap/cod1" />
+        android:src="@mipmap/cod1" />
 
     <ImageButton
         android:id="@+id/paytm"
@@ -63,7 +64,7 @@
         app:layout_constraintStart_toEndOf="@+id/payment_divider"
         app:layout_constraintTop_toBottomOf="@+id/textView24"
         app:layout_constraintVertical_bias="0.50"
-        app:srcCompat="@mipmap/paytm" />
+        android:src="@mipmap/paytm"/>
 
     <TextView
         android:id="@+id/cod_btn_title"

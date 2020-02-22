@@ -63,6 +63,7 @@ import java.util.UUID;
 
 public class DeliveryActivity extends AppCompatActivity {
 
+    public static boolean ordered=false;  //my code
     public static List<CartItemModel> cartItemModelList;
     private Toolbar toolbar;
     private RecyclerView deliveryRecyclerView;
@@ -344,7 +345,6 @@ public class DeliveryActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
     private void showConfirmationLayout() {
         codOrderConfirmed = false;
         successResponse = true;
@@ -575,7 +575,7 @@ public class DeliveryActivity extends AppCompatActivity {
                     if (jsonObject.has("CHECKSUMHASH")) {
                         String CHECKSUMHASH = jsonObject.getString("CHECKSUMHASH");
 
-                        PaytmPGService paytmPGService = PaytmPGService.getProductionService();
+                        PaytmPGService paytmPGService = PaytmPGService.getStagingService();
                         HashMap<String, String> paramMap = new HashMap<>();
                         paramMap.put("MID", M_id);
                         paramMap.put("ORDER_ID", order_id);
@@ -614,6 +614,7 @@ public class DeliveryActivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onComplete(@NonNull Task<Void> task) {
                                                                         if(task.isSuccessful()){
+                                                                            ordered=true;  //my code
                                                                             showConfirmationLayout();
                                                                         }else {
                                                                             Toast.makeText(DeliveryActivity.this, "Failed to update user orders list !", Toast.LENGTH_LONG).show();

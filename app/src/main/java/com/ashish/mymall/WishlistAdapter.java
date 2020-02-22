@@ -24,7 +24,7 @@ import java.util.List;
 public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
 
     private List<WishlistModel> wishlistModelList;
-    private Boolean wishlist,fromSearch;
+    private Boolean wishlist,fromSearch=false;
     private int lastpos=-1;
 
     public List<WishlistModel> getWishlistModelList() {

@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -148,7 +150,8 @@ public class PasswordFragment extends Fragment {
                                         newPassword.setText(null);
                                         confirmNewPass.setText(null);
                                         getActivity().finish();
-                                        Toast.makeText(getContext(), "Password successfully updated!",Toast.LENGTH_SHORT).show();
+
+                                        Toasty.success(getContext(), "Password successfully updated!",Toast.LENGTH_SHORT,true).show();
                                     }else {
                                         String error=task.getException().getMessage();
                                         Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();

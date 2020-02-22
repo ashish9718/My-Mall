@@ -29,6 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextView textView;
     private androidx.appcompat.widget.SearchView searchView;
     private RecyclerView recyclerView;
+    private Adapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,7 @@ public class SearchActivity extends AppCompatActivity {
         final List<WishlistModel> list=new ArrayList<>();
         final List<String> ids=new ArrayList<>();
 
-        final Adapter adapter=new Adapter(list,false);
+        adapter=new Adapter(list,false);
         adapter.setFromSearch(true);
         recyclerView.setAdapter(adapter);
 

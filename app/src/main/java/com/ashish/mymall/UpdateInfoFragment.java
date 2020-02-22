@@ -41,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 
 /**
@@ -225,6 +227,7 @@ public class UpdateInfoFragment extends Fragment {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
+
                                                 /// update pic
                                                 updatePic(user);
                                                 /// update pic
@@ -336,6 +339,7 @@ public class UpdateInfoFragment extends Fragment {
         }else {
             Map<String,Object> userdata= new HashMap<>();
             userdata.put("name",name.getText().toString());
+            userdata.put("email",email.getText().toString());   /////my code
             updateFields(user,userdata);
         }
     }
@@ -346,14 +350,16 @@ public class UpdateInfoFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    if(userdata.size() >1){
+                    if(userdata.size() >2){
                         DBquerries.email=email.getText().toString().trim();
                         DBquerries.fullname=name.getText().toString().trim();
                     }else {
                         DBquerries.fullname=name.getText().toString().trim();
+                        DBquerries.email=email.getText().toString();  ///my code updation
                     }
                     getActivity().finish();
-                    Toast.makeText(getContext(), "Successfully updated!",Toast.LENGTH_SHORT).show();
+                    Toasty.success(getContext(), "Successfully updated !", Toast.LENGTH_SHORT, true).show();
+                    //Toast.makeText(getContext(), "Successfully updated!",Toast.LENGTH_SHORT).show();
                 }else {
                     String error=task.getException().getMessage();
                     Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
@@ -368,13 +374,14 @@ public class UpdateInfoFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1){
-            if(requestCode == getActivity().RESULT_OK){
+            if(resultCode == getActivity().RESULT_OK){
                 if(data != null){
                     uri = data.getData();
                     updatePhoto=true;
                     Glide.with(getContext()).load(uri).into(photo);
-                }else {
-                    Toast.makeText(getContext(),"Image not found!",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toasty.error(getContext(),"Image not found!",Toast.LENGTH_SHORT,true).show();
                 }
             }
         }
@@ -390,7 +397,7 @@ public class UpdateInfoFragment extends Fragment {
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, 1);
             }else {
-                Toast.makeText(getContext(),"Permission denied",Toast.LENGTH_SHORT).show();
+                Toasty.error(getContext(),"Permission denied",Toast.LENGTH_SHORT,true).show();
             }
         }
     }

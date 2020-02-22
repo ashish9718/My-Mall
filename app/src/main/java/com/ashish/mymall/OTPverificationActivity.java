@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.DelayQueue;
 
+import es.dmoral.toasty.Toasty;
+
 public class OTPverificationActivity extends AppCompatActivity {
 
     private TextView mobileNo;
@@ -80,22 +82,23 @@ public class OTPverificationActivity extends AppCompatActivity {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if(task.isSuccessful()){
+                                                                    DeliveryActivity.ordered=true;  //my code
                                                                     DeliveryActivity.codOrderConfirmed=true;
                                                                     finish();
                                                                 }else {
-                                                                    Toast.makeText(OTPverificationActivity.this, "Failed to update user orders list !", Toast.LENGTH_LONG).show();
+                                                                    Toasty.warning(OTPverificationActivity.this, "Failed to update user orders list !", Toast.LENGTH_LONG,true).show();
                                                                 }
                                                             }
                                                         });
                                             }else {
-                                                Toast.makeText(OTPverificationActivity.this, "Order Cancelled !", Toast.LENGTH_LONG).show();
+                                                Toasty.error(OTPverificationActivity.this, "Order Cancelled !", Toast.LENGTH_LONG,true).show();
                                             }
                                         }
                                     });
 
 
                         }else {
-                            Toast.makeText(OTPverificationActivity.this,"OTP incorrect !",Toast.LENGTH_SHORT).show();
+                            Toasty.error(OTPverificationActivity.this,"OTP incorrect !",Toast.LENGTH_SHORT,true).show();
                         }
                     }
                 });

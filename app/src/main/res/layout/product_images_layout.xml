@@ -33,7 +33,7 @@
         android:id="@+id/add_to_wishlist_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:tint="#9e9e9e"

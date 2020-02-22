@@ -187,6 +187,7 @@ public class MyAccountFragment extends Fragment {
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 DBquerries.clearData();
+                DBquerries.email=null;  //my code
                 startActivity(new Intent(getContext(), RegisterActivity.class));
                 getActivity().finish();
             }

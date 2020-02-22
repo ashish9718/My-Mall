@@ -44,9 +44,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    //implementation 'com.muddzdev:styleabletoast:2.2.3'
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
 
     implementation 'com.android.volley:volley:1.1.1'
-    implementation('com.paytm:pgplussdk:1.4.4') {
+    implementation('com.paytm:pgplussdk:1.2.3') {
         transitive = true
     }
 }

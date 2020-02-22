@@ -126,12 +126,10 @@
             android:id="@+id/divider"
             android:layout_width="2dp"
             android:layout_height="41dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="51dp"
             android:background="#ffff"
             app:layout_constraintBottom_toTopOf="@+id/sign_in_btn"
             app:layout_constraintEnd_toStartOf="@+id/sign_in_register_here"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toEndOf="@+id/sign_in_forgot_pass"
             app:layout_constraintTop_toBottomOf="@+id/sign_in_password"
             app:layout_constraintVertical_bias="0.0" />

@@ -181,8 +181,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 ////// coupan redemption dialog
 
 
-
-
         final List<String> productImages = new ArrayList<>();
 
         productID = getIntent().getStringExtra("PRODUCT_ID");
@@ -307,7 +305,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                                 } else {
                                                     ALREADY_ADDED_TO_CART = false;
                                                 }
-
 
 
                                                 if(task.getResult().getDocuments().size()< (long)documentSnapshot.get("stock_quantity")){

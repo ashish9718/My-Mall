@@ -205,10 +205,10 @@
             android:layout_marginBottom="70dp"
             android:background="@android:color/transparent"
             android:padding="5dp"
+            android:src="@mipmap/continue_shoping"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@mipmap/continue_shoping" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

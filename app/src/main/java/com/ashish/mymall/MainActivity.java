@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                             } else if (id == R.id.nav_sign_out) {
                                 FirebaseAuth.getInstance().signOut();
                                 DBquerries.clearData();
+                                DBquerries.email=null;  //my code
                                 startActivity(new Intent(MainActivity.this,RegisterActivity.class));
                                 finish();
                             }
@@ -275,7 +276,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        DBquerries.checkNotifications(true,null);
+        if(currentUser!=null) {  ///my code
+            DBquerries.checkNotifications(true, null);
+        }
 
     }
 

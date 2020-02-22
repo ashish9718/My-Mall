@@ -30,6 +30,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -201,7 +202,7 @@ public class SigninFragment extends Fragment {
                         });
 
             }else {
-                pass.setError("Password must be 8 characters !");
+                pass.setError("Password must be of 8 characters !");
             }
         }else {
             email.setError("Invalid Email!");

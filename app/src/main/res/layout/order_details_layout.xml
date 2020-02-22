@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="4dp"
+    android:layout_marginTop="2dp"
     android:layout_marginBottom="4dp"
     android:background="@color/colorAccent"
     android:elevation="3dp">
@@ -300,11 +300,12 @@
         android:id="@+id/Divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/delivered_body" />
+        app:layout_constraintTop_toBottomOf="@+id/delivered_indicator" />
 
     <LinearLayout
         android:id="@+id/rate_now_container"
