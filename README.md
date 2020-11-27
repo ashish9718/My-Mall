@@ -3,14 +3,11 @@
 
 **My-mall** is an e-commerce android app built using java and firebase.
 
-![https://github.com/ashish9718/My-Mall](/1.jpg)
-![https://github.com/ashish9718/My-Mall](/2.jpg)
-![https://github.com/ashish9718/My-Mall](/3.jpg)
-![https://github.com/ashish9718/My-Mall](/4.jpg)
-![https://github.com/ashish9718/My-Mall](/5.jpg)
-![https://github.com/ashish9718/My-Mall](/6.jpg)
-![https://github.com/ashish9718/My-Mall](/7.jpg)
-![https://github.com/ashish9718/My-Mall](/8.jpg)
+<img src="1.jpg" height="650" width="300">   <img src="2.jpg" height="650" width="300">
+<img src="3.jpg" height="650" width="300">   <img src="4.jpg" height="650" width="300">
+<img src="5.jpg" height="650" width="300">   <img src="6.jpg" height="650" width="300">
+<img src="7.jpg" height="650" width="300">   <img src="8.jpg" height="650" width="300">
+
 
 
 [<img src='https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/github.svg' alt='github' height='40'>](https://github.com/ashish9718)  [website](https://ashishsagar.8b.io)  
