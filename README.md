@@ -3,8 +3,9 @@
 
 **My-mall** is an e-commerce android app built using java and firebase.
 
-<img src="1.jpg" height="600" width="300">   <img src="2.jpg" height="600" width="300">   <img src="3.jpg" height="600" width="300">  
-<img src="4.jpg" height="600" width="300">   <img src="5.jpg" height="600" width="300">   <img src="6.jpg" height="600" width="300">
+<img src="1.jpg" height="600" width="300">   <img src="2.jpg" height="600" width="300">  
+<img src="3.jpg" height="600" width="300">   <img src="4.jpg" height="600" width="300">   
+<img src="5.jpg" height="600" width="300">   <img src="6.jpg" height="600" width="300">
 <img src="7.jpg" height="600" width="300">   <img src="8.jpg" height="600" width="300">
 
 
