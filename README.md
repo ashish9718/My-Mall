@@ -5,6 +5,10 @@
 
 https://play.google.com/store/apps/details?id=com.ashish.mymall
 
+
+Checkout this new app related to Health & Fitness :
+https://play.google.com/store/apps/details?id=com.fitness.fitnesswar
+
 <img src="app/src/main/res/drawable/2.jpg" height="600" width="300">  <img src="app/src/main/res/drawable/3.jpg" height="600" width="300">  
 <img src="app/src/main/res/drawable/4.jpg" height="600" width="300">  <img src="app/src/main/res/drawable/5.jpg" height="600" width="300">  
 <img src="app/src/main/res/drawable/6.jpg" height="600" width="300">  <img src="app/src/main/res/drawable/7.jpg" height="600" width="300"> 
